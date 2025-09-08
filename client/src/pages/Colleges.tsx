@@ -28,9 +28,9 @@ interface FilterState {
 export default function Colleges() {
   const [filters, setFilters] = useState<FilterState>({
     search: "",
-    location: "",
-    stream: "",
-    type: "",
+    location: "all",
+    stream: "all",
+    type: "all",
     feeRange: [],
     facilities: [],
   });
@@ -51,13 +51,13 @@ export default function Colleges() {
       }
 
       // Location filter
-      if (filters.location) {
+      if (filters.location && filters.location !== 'all') {
         const locationMatch = college.location.toLowerCase().includes(filters.location.toLowerCase());
         if (!locationMatch) return false;
       }
 
       // Stream filter
-      if (filters.stream) {
+      if (filters.stream && filters.stream !== 'all') {
         const streamMatch = college.popular_courses.some(course => 
           course.toLowerCase().includes(filters.stream.toLowerCase())
         );
@@ -65,7 +65,7 @@ export default function Colleges() {
       }
 
       // Type filter
-      if (filters.type) {
+      if (filters.type && filters.type !== 'all') {
         const isGovernment = college.name.toLowerCase().includes('government') || 
                            college.name.toLowerCase().includes('govt');
         const isNIT = college.name.toLowerCase().includes('nit');
@@ -138,9 +138,9 @@ export default function Colleges() {
   const clearFilters = () => {
     setFilters({
       search: "",
-      location: "",
-      stream: "",
-      type: "",
+      location: "all",
+      stream: "all",
+      type: "all",
       feeRange: [],
       facilities: [],
     });
@@ -189,7 +189,7 @@ export default function Colleges() {
                     <SelectValue placeholder="All Districts" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Districts</SelectItem>
+                    <SelectItem value="all">All Districts</SelectItem>
                     {uniqueLocations.map((location) => (
                       <SelectItem key={location} value={location}>
                         {location}
@@ -205,7 +205,7 @@ export default function Colleges() {
                     <SelectValue placeholder="All Streams" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Streams</SelectItem>
+                    <SelectItem value="all">All Streams</SelectItem>
                     <SelectItem value="engineering">Engineering</SelectItem>
                     <SelectItem value="medical">Medical</SelectItem>
                     <SelectItem value="science">Science</SelectItem>
@@ -222,7 +222,7 @@ export default function Colleges() {
                     <SelectValue placeholder="All Types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Types</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="government">Government</SelectItem>
                     <SelectItem value="university">University</SelectItem>
                     <SelectItem value="medical">Medical</SelectItem>
