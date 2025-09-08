@@ -72,6 +72,40 @@ export async function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // For development, skip OIDC and use simple session auth
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  if (isDevelopment) {
+    console.log("Setting up development authentication...");
+    
+    // Development auth routes
+    app.get("/api/login", (req, res) => {
+      // For development, create a mock user session
+      (req as any).session.user = {
+        id: "dev-user-123",
+        email: "developer@example.com",
+        firstName: "Dev",
+        lastName: "User",
+        profileImageUrl: "https://via.placeholder.com/100x100"
+      };
+      
+      res.redirect("/");
+    });
+
+    app.get("/api/callback", (req, res) => {
+      res.redirect("/");
+    });
+
+    app.get("/api/logout", (req, res) => {
+      (req as any).session.destroy(() => {
+        res.redirect("/");
+      });
+    });
+
+    return; // Skip OIDC setup in development
+  }
+
+  // Production OIDC setup
   try {
     const config = await getOidcConfig();
 
@@ -142,31 +176,8 @@ export async function setupAuth(app: Express) {
       });
     });
   } catch (error) {
-    console.error("Failed to setup auth:", error);
-    console.log("Setting up development authentication fallback...");
-    
-    // Development fallback - create a simple auth system for testing
-    app.get("/api/login", (req, res) => {
-      // For development, create a mock user session
-      (req as any).session.user = {
-        id: "dev-user-123",
-        email: "developer@example.com",
-        firstName: "Dev",
-        lastName: "User",
-        profileImageUrl: "https://via.placeholder.com/100x100"
-      };
-      
-      res.redirect("/");
-    });
-
-    app.get("/api/callback", (req, res) => {
-      res.redirect("/");
-    });
-
-    app.get("/api/logout", (req, res) => {
-      (req as any).session.destroy();
-      res.redirect("/");
-    });
+    console.error("Failed to setup production auth:", error);
+    throw error;
   }
 }
 
