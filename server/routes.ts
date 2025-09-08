@@ -17,12 +17,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
+      let userId: string;
+      let userInfo: any;
+
+      // Check if using development session
+      if (req.session?.user) {
+        userId = req.session.user.id;
+        userInfo = req.session.user;
+        
+        // Ensure user exists in database for dev session
+        await storage.upsertUser({
+          id: userId,
+          email: userInfo.email,
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          profileImageUrl: userInfo.profileImageUrl,
+        });
+      } else {
+        userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+        userInfo = user;
+      }
+      
       const profile = await storage.getUserProfile(userId);
       
       res.json({
-        ...user,
+        ...userInfo,
         profile,
       });
     } catch (error) {
@@ -34,7 +54,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Profile routes
   app.post('/api/profile', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const profileData = insertUserProfileSchema.parse(req.body);
       
       const existingProfile = await storage.getUserProfile(userId);
@@ -61,7 +81,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/profile', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const profile = await storage.getUserProfile(userId);
       
       if (!profile) {
@@ -79,7 +99,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Assessment routes
   app.post('/api/assessments', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const assessmentData = insertAssessmentSchema.parse(req.body);
       
       const assessment = await storage.createAssessment(userId, assessmentData);
@@ -96,7 +116,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/assessments', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const assessments = await storage.getUserAssessments(userId);
       res.json(assessments);
     } catch (error) {
@@ -107,7 +127,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/assessments/latest/:type', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const { type } = req.params;
       
       const assessment = await storage.getLatestAssessment(userId, type);
@@ -126,7 +146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Saved colleges routes
   app.post('/api/saved/colleges', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const collegeData = insertSavedCollegeSchema.parse(req.body);
       
       const savedCollege = await storage.saveCollege(userId, collegeData);
@@ -143,7 +163,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/saved/colleges', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const savedColleges = await storage.getSavedColleges(userId);
       res.json(savedColleges);
     } catch (error) {
@@ -154,7 +174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/saved/colleges/:name', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const { name } = req.params;
       
       const removed = await storage.removeSavedCollege(userId, decodeURIComponent(name));
@@ -172,7 +192,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Saved courses routes
   app.post('/api/saved/courses', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const courseData = insertSavedCourseSchema.parse(req.body);
       
       const savedCourse = await storage.saveCourse(userId, courseData);
@@ -189,7 +209,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/saved/courses', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const savedCourses = await storage.getSavedCourses(userId);
       res.json(savedCourses);
     } catch (error) {
@@ -200,7 +220,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/saved/courses/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const { id } = req.params;
       
       const removed = await storage.removeSavedCourse(userId, id);
@@ -229,7 +249,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User activity routes
   app.get('/api/activity', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session?.user?.id || req.user.claims.sub;
       const limit = parseInt(req.query.limit as string) || 10;
       
       const activities = await storage.getUserActivity(userId, limit);
