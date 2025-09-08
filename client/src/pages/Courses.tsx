@@ -46,9 +46,9 @@ export default function Courses() {
   const { data: savedCourses = [] } = useQuery({
     queryKey: ["/api/saved/courses"],
     retry: false,
-  });
+  }) as { data: any[] };
 
-  const savedCourseIds = savedCourses.map((saved: any) => saved.courseId);
+  const savedCourseIds = (savedCourses || []).map((saved: any) => saved.courseId);
 
   // Handle direct course selection from URL hash
   useEffect(() => {

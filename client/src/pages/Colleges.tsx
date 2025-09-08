@@ -38,9 +38,9 @@ export default function Colleges() {
   const { data: savedColleges = [] } = useQuery({
     queryKey: ["/api/saved/colleges"],
     retry: false,
-  });
+  }) as { data: any[] };
 
-  const savedCollegeNames = savedColleges.map((saved: any) => saved.collegeName);
+  const savedCollegeNames = (savedColleges || []).map((saved: any) => saved.collegeName);
 
   const filteredColleges = useMemo(() => {
     return collegesData.filter((college) => {
@@ -146,9 +146,9 @@ export default function Colleges() {
     });
   };
 
-  const uniqueLocations = [...new Set(collegesData.map(college => 
+  const uniqueLocations = Array.from(new Set(collegesData.map(college => 
     college.location.split(',')[1]?.trim() || college.location.split(',')[0]?.trim()
-  ))].sort();
+  ))).sort();
 
   return (
     <div className="pt-20 min-h-screen bg-background">

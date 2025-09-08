@@ -27,12 +27,12 @@ export default function Home() {
   const { data: savedColleges = [] } = useQuery({
     queryKey: ["/api/saved/colleges"],
     retry: false,
-  });
+  }) as { data: any[] };
 
   const { data: savedCourses = [] } = useQuery({
     queryKey: ["/api/saved/courses"],
     retry: false,
-  });
+  }) as { data: any[] };
 
   const { data: assessments = [] } = useQuery({
     queryKey: ["/api/assessments"],
@@ -42,12 +42,12 @@ export default function Home() {
   const { data: activities = [] } = useQuery({
     queryKey: ["/api/activity"],
     retry: false,
-  });
+  }) as { data: any[] };
 
   const { data: timeline = [] } = useQuery({
     queryKey: ["/api/timeline"],
     retry: false,
-  });
+  }) as { data: any[] };
 
   const userName = user?.firstName || user?.email?.split('@')[0] || 'Student';
 
