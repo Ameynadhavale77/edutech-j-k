@@ -42,11 +42,12 @@ export default function Quiz() {
   useEffect(() => {
     if (currentQuestion && currentLanguage !== 'en') {
       translateQuizQuestion(currentQuestion, currentLanguage)
-        .then(setTranslatedQuestion);
+        .then(setTranslatedQuestion)
+        .catch(() => setTranslatedQuestion(currentQuestion));
     } else {
       setTranslatedQuestion(currentQuestion);
     }
-  }, [currentQuestion, currentLanguage, translateQuizQuestion]);
+  }, [currentQuestion?.id, currentLanguage]); // Only depend on question ID and language
   const totalQuestions = quizQuestions.length;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const isAnswered = answers[currentQuestion?.id] !== undefined;

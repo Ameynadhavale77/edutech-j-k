@@ -83,22 +83,22 @@ export default function Landing() {
                 <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <University className="text-2xl" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">50+ Colleges</h3>
-                <p className="text-blue-100">Comprehensive database of J&K colleges</p>
+                <h3 className="text-xl font-semibold mb-2">{getTranslation("collegesCount", currentLanguage)}</h3>
+                <p className="text-blue-100">{getTranslation("collegesDescription", currentLanguage)}</p>
               </div>
               <div className="text-center" data-testid="feature-assessment">
                 <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Brain className="text-2xl" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Smart Assessment</h3>
-                <p className="text-blue-100">AI-powered aptitude and interest evaluation</p>
+                <h3 className="text-xl font-semibold mb-2">{getTranslation("smartAssessment", currentLanguage)}</h3>
+                <p className="text-blue-100">{getTranslation("assessmentDescription", currentLanguage)}</p>
               </div>
               <div className="text-center" data-testid="feature-pathways">
                 <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Route className="text-2xl" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Career Pathways</h3>
-                <p className="text-blue-100">Detailed course-to-career mapping</p>
+                <h3 className="text-xl font-semibold mb-2">{getTranslation("careerPathways", currentLanguage)}</h3>
+                <p className="text-blue-100">{getTranslation("pathwaysDescription", currentLanguage)}</p>
               </div>
             </div>
           </div>
@@ -110,10 +110,10 @@ export default function Landing() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-foreground mb-4" data-testid="text-features-title">
-              Everything You Need for Educational Success
+              {getTranslation("featuresTitle", currentLanguage)}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Our comprehensive platform provides all the tools and information you need to make informed decisions about your educational journey.
+              {getTranslation("featuresDescription", currentLanguage)}
             </p>
           </div>
 
@@ -122,8 +122,8 @@ export default function Landing() {
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mb-4">
                 <GraduationCap className="text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">College Directory</h3>
-              <p className="text-sm text-muted-foreground">Browse and compare colleges across J&K with detailed information, facilities, and admission criteria.</p>
+              <h3 className="font-semibold text-foreground mb-2">{getTranslation("collegeDirectory", currentLanguage)}</h3>
+              <p className="text-sm text-muted-foreground">{getTranslation("collegeDirectoryDescription", currentLanguage)}</p>
             </div>
 
             <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
