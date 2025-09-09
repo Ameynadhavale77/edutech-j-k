@@ -7,8 +7,7 @@ interface QuizOption {
 }
 
 interface QuizQuestionProps {
-  question: string;
-  options: QuizOption[];
+  question: any; // Can be either a string or a translated question object
   selectedAnswer: string | null;
   onAnswerSelect: (optionId: string) => void;
   questionNumber: number;
@@ -17,12 +16,14 @@ interface QuizQuestionProps {
 
 export default function QuizQuestion({
   question,
-  options,
   selectedAnswer,
   onAnswerSelect,
   questionNumber,
   totalQuestions,
 }: QuizQuestionProps) {
+  // Handle both string (legacy) and object (new translated) question formats
+  const questionText = typeof question === 'string' ? question : question?.question || '';
+  const options = typeof question === 'object' && question?.options ? question.options : [];
   return (
     <div className="slide-in" data-testid="quiz-question">
       <div className="mb-6">
@@ -44,11 +45,11 @@ export default function QuizQuestion({
       </div>
 
       <h3 className="text-xl font-semibold text-foreground mb-6" data-testid="text-question">
-        {question}
+        {questionText}
       </h3>
 
       <div className="space-y-3">
-        {options.map((option) => (
+        {options.map((option: any) => (
           <Button
             key={option.id}
             variant="outline"

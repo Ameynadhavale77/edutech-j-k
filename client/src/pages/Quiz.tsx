@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { Brain, Clock, BarChart3, ArrowLeft, ArrowRight } from "lucide-react";
@@ -35,6 +35,16 @@ export default function Quiz() {
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [isStarted, setIsStarted] = useState(false);
   const [translatedQuestion, setTranslatedQuestion] = useState<any>(null);
+
+  // Translate current question when language or question changes
+  useEffect(() => {
+    if (currentQuestion && currentLanguage !== 'en') {
+      translateQuizQuestion(currentQuestion, currentLanguage)
+        .then(setTranslatedQuestion);
+    } else {
+      setTranslatedQuestion(currentQuestion);
+    }
+  }, [currentQuestion, currentLanguage, translateQuizQuestion]);
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const totalQuestions = quizQuestions.length;
@@ -182,7 +192,7 @@ export default function Quiz() {
             {/* Quiz Header */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-foreground mb-4" data-testid="text-quiz-title">
-                Aptitude & Interest Assessment
+                {getTranslation("assessment", currentLanguage)} & Interest Assessment
               </h1>
               <p className="text-muted-foreground mb-6" data-testid="text-quiz-description">
                 Discover your ideal stream and career path through our comprehensive assessment
@@ -247,7 +257,7 @@ export default function Quiz() {
                   onClick={startQuiz}
                   data-testid="button-start-quiz"
                 >
-                  Start Assessment
+                  {getTranslation("startAssessment", currentLanguage)}
                 </Button>
               </CardContent>
             </Card>
@@ -263,13 +273,9 @@ export default function Quiz() {
         <div className="max-w-4xl mx-auto">
           <Card>
             <CardContent className="p-8">
-              {currentQuestion && (
+              {(translatedQuestion || currentQuestion) && (
                 <QuizQuestion
-                  question={getText(currentQuestion.question, currentLanguage)}
-                  options={currentQuestion.options.map(option => ({
-                    ...option,
-                    text: getText(option.text, currentLanguage)
-                  }))}
+                  question={translatedQuestion || currentQuestion}
                   selectedAnswer={answers[currentQuestion.id] || null}
                   onAnswerSelect={handleAnswerSelect}
                   questionNumber={currentQuestionIndex + 1}
@@ -285,7 +291,7 @@ export default function Quiz() {
                   data-testid="button-previous"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Previous
+                  {getTranslation("previous", currentLanguage)}
                 </Button>
                 <Button
                   onClick={handleNext}
@@ -299,12 +305,12 @@ export default function Quiz() {
                     </>
                   ) : isLastQuestion ? (
                     <>
-                      Complete Assessment
+                      {getTranslation("completeAssessment", currentLanguage)}
                       <BarChart3 className="w-4 h-4 ml-2" />
                     </>
                   ) : (
                     <>
-                      Next
+                      {getTranslation("next", currentLanguage)}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </>
                   )}
