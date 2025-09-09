@@ -8,6 +8,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -54,6 +55,7 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             <NavLinks />
+            <LanguageSwitcher />
             <Button
               variant="ghost"
               size="icon"
@@ -102,6 +104,9 @@ export default function Navigation() {
                 <div className="flex flex-col space-y-4 mt-8">
                   <NavLinks isMobile />
                   <div className="border-t pt-4 space-y-2">
+                    <div className="px-2">
+                      <LanguageSwitcher />
+                    </div>
                     <Button asChild className="w-full justify-start" data-testid="button-profile-mobile">
                       <Link href="/profile" onClick={() => setIsOpen(false)}>
                         Profile

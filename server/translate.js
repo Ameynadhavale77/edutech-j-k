@@ -1,6 +1,10 @@
-const fetch = require('node-fetch');
-const fs = require('fs').promises;
-const path = require('path');
+import fetch from 'node-fetch';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Language mapping for LibreTranslate
 const languages = {
@@ -137,8 +141,9 @@ async function translateQuizData() {
   }
 }
 
-if (require.main === module) {
+// Run if this is the main module
+if (import.meta.url === `file://${process.argv[1]}`) {
   translateQuizData();
 }
 
-module.exports = { translateQuizData };
+export { translateQuizData };

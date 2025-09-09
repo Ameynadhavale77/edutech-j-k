@@ -1,0 +1,952 @@
+[
+  {
+    "id": 1,
+    "type": "single",
+    "question": {
+      "en": "What type of activities do you enjoy most in your free time?",
+      "hi": "आप अपने खाली समय में किस प्रकार की गतिविधियों का सबसे अधिक आनंद लेते हैं?",
+      "mr": "तुम्हाला तुमच्या मोकळ्या वेळेत कोणत्या प्रकारच्या क्रियाकलापांचा सर्वात जास्त आनंद मिळतो?",
+      "ur": "آپ اپنے فارغ وقت میں کس قسم کی سرگرمیوں سے سب سے زیادہ لطف اندوز ہوتے ہیں؟",
+      "pa": "ਤੁਸੀਂ ਆਪਣੇ ਖਾਲੀ ਸਮੇਂ ਵਿੱਚ ਕਿਸ ਕਿਸਮ ਦੀਆਂ ਗਤੀਵਿਧੀਆਂ ਦਾ ਸਭ ਤੋਂ ਵੱਧ ਆਨੰਦ ਲੈਂਦੇ ਹੋ?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Conducting experiments, solving math problems, or working with technology",
+          "hi": "प्रयोग करना, गणित की समस्याओं को हल करना, या प्रौद्योगिकी के साथ काम करना",
+          "mr": "प्रयोग करणे, गणितातील समस्या सोडवणे, किंवा तंत्रज्ञानासह काम करणे",
+          "ur": "تجربات کرنا، ریاضی کے مسائل حل کرنا، یا ٹیکنالوجی کے ساتھ کام کرنا",
+          "pa": "ਪ੍ਰਯੋਗ ਕਰਨਾ, ਗਣਿਤ ਦੇ ਸਮੱਸਿਆਵਾਂ ਹੱਲ ਕਰਨਾ, ਜਾਂ ਤਕਨਾਲੋਜੀ ਨਾਲ ਕੰਮ ਕਰਨਾ",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 3,
+          "medical": 1,
+          "commerce": 0,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Reading, writing, creating art, or studying history and culture",
+          "hi": "Reading, writing, creating art, or studying history and culture",
+          "mr": "Reading, writing, creating art, or studying history and culture",
+          "ur": "Reading, writing, creating art, or studying history and culture",
+          "pa": "Reading, writing, creating art, or studying history and culture",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 0,
+          "medical": 0,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 0
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Managing finances, starting small businesses, or analyzing market trends",
+          "hi": "Managing finances, starting small businesses, or analyzing market trends",
+          "mr": "Managing finances, starting small businesses, or analyzing market trends",
+          "ur": "Managing finances, starting small businesses, or analyzing market trends",
+          "pa": "Managing finances, starting small businesses, or analyzing market trends",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 1,
+          "medical": 0,
+          "commerce": 3,
+          "arts": 1,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Hands-on activities like crafting, repairing, or building things",
+          "hi": "Hands-on activities like crafting, repairing, or building things",
+          "mr": "Hands-on activities like crafting, repairing, or building things",
+          "ur": "Hands-on activities like crafting, repairing, or building things",
+          "pa": "Hands-on activities like crafting, repairing, or building things",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 0,
+          "commerce": 0,
+          "arts": 1,
+          "vocational": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "type": "single",
+    "question": {
+      "en": "Which subject did you find most interesting in school?",
+      "hi": "Which subject did you find most interesting in school?",
+      "mr": "Which subject did you find most interesting in school?",
+      "ur": "Which subject did you find most interesting in school?",
+      "pa": "Which subject did you find most interesting in school?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Mathematics and Physics",
+          "hi": "Mathematics and Physics",
+          "mr": "Mathematics and Physics",
+          "ur": "Mathematics and Physics",
+          "pa": "Mathematics and Physics",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 3,
+          "medical": 2,
+          "commerce": 1,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Biology and Chemistry",
+          "hi": "Biology and Chemistry",
+          "mr": "Biology and Chemistry",
+          "ur": "Biology and Chemistry",
+          "pa": "Biology and Chemistry",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 1,
+          "medical": 3,
+          "commerce": 0,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "History and Literature",
+          "hi": "History and Literature",
+          "mr": "History and Literature",
+          "ur": "History and Literature",
+          "pa": "History and Literature",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 0,
+          "medical": 0,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 0
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Economics and Business Studies",
+          "hi": "Economics and Business Studies",
+          "mr": "Economics and Business Studies",
+          "ur": "Economics and Business Studies",
+          "pa": "Economics and Business Studies",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 1,
+          "medical": 0,
+          "commerce": 3,
+          "arts": 1,
+          "vocational": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "type": "single",
+    "question": {
+      "en": "What kind of work environment appeals to you most?",
+      "hi": "What kind of work environment appeals to you most?",
+      "mr": "What kind of work environment appeals to you most?",
+      "ur": "What kind of work environment appeals to you most?",
+      "pa": "What kind of work environment appeals to you most?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Laboratory or research facility",
+          "hi": "Laboratory or research facility",
+          "mr": "Laboratory or research facility",
+          "ur": "Laboratory or research facility",
+          "pa": "Laboratory or research facility",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 2,
+          "medical": 3,
+          "commerce": 0,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Office with computers and business meetings",
+          "hi": "Office with computers and business meetings",
+          "mr": "Office with computers and business meetings",
+          "ur": "Office with computers and business meetings",
+          "pa": "Office with computers and business meetings",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 0,
+          "commerce": 3,
+          "arts": 1,
+          "vocational": 0
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Creative studio or cultural institution",
+          "hi": "Creative studio or cultural institution",
+          "mr": "Creative studio or cultural institution",
+          "ur": "Creative studio or cultural institution",
+          "pa": "Creative studio or cultural institution",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 0,
+          "medical": 0,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Workshop or field work",
+          "hi": "Workshop or field work",
+          "mr": "Workshop or field work",
+          "ur": "Workshop or field work",
+          "pa": "Workshop or field work",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 1,
+          "commerce": 0,
+          "arts": 0,
+          "vocational": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "type": "single",
+    "question": {
+      "en": "Which of these activities would you find most rewarding?",
+      "hi": "Which of these activities would you find most rewarding?",
+      "mr": "Which of these activities would you find most rewarding?",
+      "ur": "Which of these activities would you find most rewarding?",
+      "pa": "Which of these activities would you find most rewarding?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Discovering a scientific breakthrough or inventing something new",
+          "hi": "Discovering a scientific breakthrough or inventing something new",
+          "mr": "Discovering a scientific breakthrough or inventing something new",
+          "ur": "Discovering a scientific breakthrough or inventing something new",
+          "pa": "Discovering a scientific breakthrough or inventing something new",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 3,
+          "medical": 2,
+          "commerce": 0,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Helping people recover from illness or injury",
+          "hi": "Helping people recover from illness or injury",
+          "mr": "Helping people recover from illness or injury",
+          "ur": "Helping people recover from illness or injury",
+          "pa": "Helping people recover from illness or injury",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 2,
+          "engineering": 0,
+          "medical": 3,
+          "commerce": 0,
+          "arts": 1,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Creating a successful business or financial strategy",
+          "hi": "Creating a successful business or financial strategy",
+          "mr": "Creating a successful business or financial strategy",
+          "ur": "Creating a successful business or financial strategy",
+          "pa": "Creating a successful business or financial strategy",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 1,
+          "medical": 0,
+          "commerce": 3,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Creating art, music, or literature that inspires others",
+          "hi": "Creating art, music, or literature that inspires others",
+          "mr": "Creating art, music, or literature that inspires others",
+          "ur": "Creating art, music, or literature that inspires others",
+          "pa": "Creating art, music, or literature that inspires others",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 0,
+          "medical": 0,
+          "commerce": 0,
+          "arts": 3,
+          "vocational": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "type": "single",
+    "question": {
+      "en": "How do you prefer to solve problems?",
+      "hi": "How do you prefer to solve problems?",
+      "mr": "How do you prefer to solve problems?",
+      "ur": "How do you prefer to solve problems?",
+      "pa": "How do you prefer to solve problems?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Using logical analysis and systematic methods",
+          "hi": "Using logical analysis and systematic methods",
+          "mr": "Using logical analysis and systematic methods",
+          "ur": "Using logical analysis and systematic methods",
+          "pa": "Using logical analysis and systematic methods",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 3,
+          "medical": 2,
+          "commerce": 2,
+          "arts": 1,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Through creative and innovative approaches",
+          "hi": "Through creative and innovative approaches",
+          "mr": "Through creative and innovative approaches",
+          "ur": "Through creative and innovative approaches",
+          "pa": "Through creative and innovative approaches",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 2,
+          "engineering": 2,
+          "medical": 1,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 2
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "By collaborating and discussing with others",
+          "hi": "By collaborating and discussing with others",
+          "mr": "By collaborating and discussing with others",
+          "ur": "By collaborating and discussing with others",
+          "pa": "By collaborating and discussing with others",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 1,
+          "medical": 2,
+          "commerce": 2,
+          "arts": 2,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Through hands-on trial and experimentation",
+          "hi": "Through hands-on trial and experimentation",
+          "mr": "Through hands-on trial and experimentation",
+          "ur": "Through hands-on trial and experimentation",
+          "pa": "Through hands-on trial and experimentation",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 2,
+          "engineering": 3,
+          "medical": 2,
+          "commerce": 0,
+          "arts": 1,
+          "vocational": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "type": "single",
+    "question": {
+      "en": "What motivates you the most?",
+      "hi": "What motivates you the most?",
+      "mr": "What motivates you the most?",
+      "ur": "What motivates you the most?",
+      "pa": "What motivates you the most?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Understanding how things work and making discoveries",
+          "hi": "Understanding how things work and making discoveries",
+          "mr": "Understanding how things work and making discoveries",
+          "ur": "Understanding how things work and making discoveries",
+          "pa": "Understanding how things work and making discoveries",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 3,
+          "medical": 2,
+          "commerce": 0,
+          "arts": 1,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Helping others and making a positive impact on society",
+          "hi": "Helping others and making a positive impact on society",
+          "mr": "Helping others and making a positive impact on society",
+          "ur": "Helping others and making a positive impact on society",
+          "pa": "Helping others and making a positive impact on society",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 1,
+          "medical": 3,
+          "commerce": 1,
+          "arts": 2,
+          "vocational": 2
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Financial success and business achievement",
+          "hi": "Financial success and business achievement",
+          "mr": "Financial success and business achievement",
+          "ur": "Financial success and business achievement",
+          "pa": "Financial success and business achievement",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 1,
+          "medical": 1,
+          "commerce": 3,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Self-expression and creative fulfillment",
+          "hi": "Self-expression and creative fulfillment",
+          "mr": "Self-expression and creative fulfillment",
+          "ur": "Self-expression and creative fulfillment",
+          "pa": "Self-expression and creative fulfillment",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 1,
+          "medical": 0,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "type": "single",
+    "question": {
+      "en": "Which type of books or media do you prefer?",
+      "hi": "Which type of books or media do you prefer?",
+      "mr": "Which type of books or media do you prefer?",
+      "ur": "Which type of books or media do you prefer?",
+      "pa": "Which type of books or media do you prefer?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Science magazines, documentaries, and technical journals",
+          "hi": "Science magazines, documentaries, and technical journals",
+          "mr": "Science magazines, documentaries, and technical journals",
+          "ur": "Science magazines, documentaries, and technical journals",
+          "pa": "Science magazines, documentaries, and technical journals",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 2,
+          "medical": 2,
+          "commerce": 0,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Novels, poetry, and artistic content",
+          "hi": "Novels, poetry, and artistic content",
+          "mr": "Novels, poetry, and artistic content",
+          "ur": "Novels, poetry, and artistic content",
+          "pa": "Novels, poetry, and artistic content",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 0,
+          "medical": 0,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 0
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Business news, economics, and financial publications",
+          "hi": "Business news, economics, and financial publications",
+          "mr": "Business news, economics, and financial publications",
+          "ur": "Business news, economics, and financial publications",
+          "pa": "Business news, economics, and financial publications",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 1,
+          "medical": 0,
+          "commerce": 3,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "DIY guides, practical manuals, and how-to content",
+          "hi": "DIY guides, practical manuals, and how-to content",
+          "mr": "DIY guides, practical manuals, and how-to content",
+          "ur": "DIY guides, practical manuals, and how-to content",
+          "pa": "DIY guides, practical manuals, and how-to content",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 1,
+          "commerce": 1,
+          "arts": 1,
+          "vocational": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "type": "single",
+    "question": {
+      "en": "In group projects, what role do you usually take?",
+      "hi": "In group projects, what role do you usually take?",
+      "mr": "In group projects, what role do you usually take?",
+      "ur": "In group projects, what role do you usually take?",
+      "pa": "In group projects, what role do you usually take?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "The researcher who gathers and analyzes information",
+          "hi": "The researcher who gathers and analyzes information",
+          "mr": "The researcher who gathers and analyzes information",
+          "ur": "The researcher who gathers and analyzes information",
+          "pa": "The researcher who gathers and analyzes information",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 2,
+          "medical": 2,
+          "commerce": 1,
+          "arts": 2,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "The leader who organizes and manages the team",
+          "hi": "The leader who organizes and manages the team",
+          "mr": "The leader who organizes and manages the team",
+          "ur": "The leader who organizes and manages the team",
+          "pa": "The leader who organizes and manages the team",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 2,
+          "commerce": 3,
+          "arts": 1,
+          "vocational": 2
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "The creative person who comes up with innovative ideas",
+          "hi": "The creative person who comes up with innovative ideas",
+          "mr": "The creative person who comes up with innovative ideas",
+          "ur": "The creative person who comes up with innovative ideas",
+          "pa": "The creative person who comes up with innovative ideas",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 2,
+          "engineering": 2,
+          "medical": 1,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 2
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "The implementer who puts ideas into practical action",
+          "hi": "The implementer who puts ideas into practical action",
+          "mr": "The implementer who puts ideas into practical action",
+          "ur": "The implementer who puts ideas into practical action",
+          "pa": "The implementer who puts ideas into practical action",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 3,
+          "medical": 2,
+          "commerce": 2,
+          "arts": 1,
+          "vocational": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "type": "single",
+    "question": {
+      "en": "What type of career stability do you prefer?",
+      "hi": "What type of career stability do you prefer?",
+      "mr": "What type of career stability do you prefer?",
+      "ur": "What type of career stability do you prefer?",
+      "pa": "What type of career stability do you prefer?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Stable job with consistent research opportunities",
+          "hi": "Stable job with consistent research opportunities",
+          "mr": "Stable job with consistent research opportunities",
+          "ur": "Stable job with consistent research opportunities",
+          "pa": "Stable job with consistent research opportunities",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 2,
+          "medical": 3,
+          "commerce": 1,
+          "arts": 1,
+          "vocational": 2
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Dynamic business environment with growth potential",
+          "hi": "Dynamic business environment with growth potential",
+          "mr": "Dynamic business environment with growth potential",
+          "ur": "Dynamic business environment with growth potential",
+          "pa": "Dynamic business environment with growth potential",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 2,
+          "medical": 1,
+          "commerce": 3,
+          "arts": 1,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Flexible creative work with artistic freedom",
+          "hi": "Flexible creative work with artistic freedom",
+          "mr": "Flexible creative work with artistic freedom",
+          "ur": "Flexible creative work with artistic freedom",
+          "pa": "Flexible creative work with artistic freedom",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 0,
+          "engineering": 1,
+          "medical": 0,
+          "commerce": 1,
+          "arts": 3,
+          "vocational": 2
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Practical work with tangible results and job security",
+          "hi": "Practical work with tangible results and job security",
+          "mr": "Practical work with tangible results and job security",
+          "ur": "Practical work with tangible results and job security",
+          "pa": "Practical work with tangible results and job security",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 2,
+          "commerce": 2,
+          "arts": 0,
+          "vocational": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "type": "single",
+    "question": {
+      "en": "Which of these skills comes most naturally to you?",
+      "hi": "Which of these skills comes most naturally to you?",
+      "mr": "Which of these skills comes most naturally to you?",
+      "ur": "Which of these skills comes most naturally to you?",
+      "pa": "Which of these skills comes most naturally to you?",
+      "ks": "TODO - Kashmiri translation",
+      "doi": "TODO - Dogri translation"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Mathematical calculations and logical reasoning",
+          "hi": "Mathematical calculations and logical reasoning",
+          "mr": "Mathematical calculations and logical reasoning",
+          "ur": "Mathematical calculations and logical reasoning",
+          "pa": "Mathematical calculations and logical reasoning",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 3,
+          "engineering": 3,
+          "medical": 2,
+          "commerce": 2,
+          "arts": 0,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Communication and interpersonal relationships",
+          "hi": "Communication and interpersonal relationships",
+          "mr": "Communication and interpersonal relationships",
+          "ur": "Communication and interpersonal relationships",
+          "pa": "Communication and interpersonal relationships",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 1,
+          "medical": 2,
+          "commerce": 2,
+          "arts": 3,
+          "vocational": 1
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Organization and strategic planning",
+          "hi": "Organization and strategic planning",
+          "mr": "Organization and strategic planning",
+          "ur": "Organization and strategic planning",
+          "pa": "Organization and strategic planning",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 2,
+          "commerce": 3,
+          "arts": 1,
+          "vocational": 2
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Manual dexterity and practical skills",
+          "hi": "Manual dexterity and practical skills",
+          "mr": "Manual dexterity and practical skills",
+          "ur": "Manual dexterity and practical skills",
+          "pa": "Manual dexterity and practical skills",
+          "ks": "TODO - Kashmiri translation",
+          "doi": "TODO - Dogri translation"
+        },
+        "weights": {
+          "science": 1,
+          "engineering": 2,
+          "medical": 2,
+          "commerce": 0,
+          "arts": 2,
+          "vocational": 3
+        }
+      }
+    ]
+  }
+]

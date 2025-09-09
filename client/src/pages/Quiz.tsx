@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import QuizQuestion from "@/components/QuizQuestion";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import quizQuestions from "@/data/quiz-questions.json";
+import { useLanguage, getText } from "@/components/LanguageSwitcher";
+import quizQuestionsMultilingual from "@/data/quiz-questions-multilingual.json";
 
 interface QuizAnswers {
   [questionId: number]: string;
@@ -26,12 +27,13 @@ interface StreamScores {
 export default function Quiz() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const currentLanguage = useLanguage();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [isStarted, setIsStarted] = useState(false);
 
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-  const totalQuestions = quizQuestions.length;
+  const currentQuestion = quizQuestionsMultilingual[currentQuestionIndex];
+  const totalQuestions = quizQuestionsMultilingual.length;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const isAnswered = answers[currentQuestion?.id] !== undefined;
 
@@ -45,7 +47,7 @@ export default function Quiz() {
       vocational: 0,
     };
 
-    quizQuestions.forEach((question) => {
+    quizQuestionsMultilingual.forEach((question) => {
       const selectedOptionId = answers[question.id];
       if (selectedOptionId) {
         const selectedOption = question.options.find(opt => opt.id === selectedOptionId);
@@ -259,8 +261,11 @@ export default function Quiz() {
             <CardContent className="p-8">
               {currentQuestion && (
                 <QuizQuestion
-                  question={currentQuestion.question}
-                  options={currentQuestion.options}
+                  question={getText(currentQuestion.question, currentLanguage)}
+                  options={currentQuestion.options.map(option => ({
+                    ...option,
+                    text: getText(option.text, currentLanguage)
+                  }))}
                   selectedAnswer={answers[currentQuestion.id] || null}
                   onAnswerSelect={handleAnswerSelect}
                   questionNumber={currentQuestionIndex + 1}
