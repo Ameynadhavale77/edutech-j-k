@@ -36,6 +36,8 @@ export default function Quiz() {
   const [isStarted, setIsStarted] = useState(false);
   const [translatedQuestion, setTranslatedQuestion] = useState<any>(null);
 
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+
   // Translate current question when language or question changes
   useEffect(() => {
     if (currentQuestion && currentLanguage !== 'en') {
@@ -45,8 +47,6 @@ export default function Quiz() {
       setTranslatedQuestion(currentQuestion);
     }
   }, [currentQuestion, currentLanguage, translateQuizQuestion]);
-
-  const currentQuestion = quizQuestions[currentQuestionIndex];
   const totalQuestions = quizQuestions.length;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const isAnswered = answers[currentQuestion?.id] !== undefined;
