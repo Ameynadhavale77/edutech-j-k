@@ -78,13 +78,13 @@ export default function Home() {
                 <Button asChild data-testid="button-take-assessment">
                   <Link href="/quiz">
                     <Star className="w-4 h-4 mr-2" />
-                    Take Assessment
+                    {getTranslation("takeAssessment", currentLanguage)}
                   </Link>
                 </Button>
                 <Button variant="outline" asChild data-testid="button-explore-colleges">
                   <Link href="/colleges">
                     <University className="w-4 h-4 mr-2" />
-                    Explore Colleges
+                    {getTranslation("colleges", currentLanguage)}
                   </Link>
                 </Button>
               </div>
