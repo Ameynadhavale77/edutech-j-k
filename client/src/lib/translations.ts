@@ -354,6 +354,80 @@ export const translations = {
     pa: "ਵਿਸਤ੍ਰਿਤ ਜਾਣਕਾਰੀ, ਸਹੂਲਤਾਂ ਅਤੇ ਦਾਖਲਾ ਮਾਪਦੰਡਾਂ ਦੇ ਨਾਲ ਜੰਮੂ-ਕਸ਼ਮੀਰ ਦੇ ਕਾਲਜਾਂ ਨੂੰ ਬ੍ਰਾਉਜ਼ ਕਰੋ ਅਤੇ ਤੁਲਨਾ ਕਰੋ।",
     ks: "تفصیلی معلومات، سہولات تہ داخلہ معیار سان جموں کشمیر کالجن ہند دیکھو تہ موازنہ کرو۔",
     doi: "विस्तृत जानकारी, सुविधाओं और प्रवेश मानदंडों के साथ जम्मू-कश्मीर के कॉलेजों को ब्राउज़ करें और तुलना करें।"
+  },
+
+  // Quiz UI elements
+  questionOf: {
+    en: "Question",
+    hi: "प्रश्न",
+    mr: "प्रश्न",
+    ur: "سوال",
+    pa: "ਸਵਾਲ",
+    ks: "سوال",
+    doi: "प्रश्न"
+  },
+  of: {
+    en: "of",
+    hi: "में से",
+    mr: "पैकी",
+    ur: "میں سے",
+    pa: "ਵਿੱਚੋਂ",
+    ks: "منز",
+    doi: "में से"
+  },
+  progress: {
+    en: "Progress",
+    hi: "प्रगति",
+    mr: "प्रगती",
+    ur: "پیش قدمی",
+    pa: "ਤਰੱਕੀ",
+    ks: "پیش قدمی",
+    doi: "प्रगति"
+  },
+  readyToStart: {
+    en: "Ready to Get Started?",
+    hi: "शुरुआत करने के लिए तैयार हैं?",
+    mr: "सुरुवात करण्यासाठी तयार आहात?",
+    ur: "شروع کرنے کے لیے تیار ہیں؟",
+    pa: "ਸ਼ੁਰੂਆਤ ਕਰਨ ਲਈ ਤਿਆਰ ਹੋ?",
+    ks: "شروع کرنہ باپت تیار چھو؟",
+    doi: "शुरुआत करने के लिए तैयार हैं?"
+  },
+  quizInstructions: {
+    en: "This assessment will help you understand your academic strengths and interests. Answer each question honestly based on your preferences and natural inclinations.",
+    hi: "यह मूल्यांकन आपको अपनी शैक्षणिक शक्तियों और रुचियों को समझने में मदद करेगा। अपनी प्राथमिकताओं और प्राकृतिक झुकाव के आधार पर प्रत्येक प्रश्न का ईमानदारी से उत्तर दें।",
+    mr: "हे मूल्यमापन तुम्हाला तुमच्या शैक्षणिक सामर्थ्य आणि स्वारस्य समजण्यास मदत करेल। तुमच्या पसंतीगी आणि नैसर्गिक कलांनुसार प्रत्येक प्रश्नाचे प्रामाणिक उत्तर द्या।",
+    ur: "یہ تشخیص آپ کو اپنی تعلیمی صلاحیات اور دلچسپیوں کو سمجھنے میں مدد کرے گی۔ اپنی ترجیحات اور فطری رجحانات کی بنیاد پر ہر سوال کا دیانتداری سے جواب دیں۔",
+    pa: "ਇਹ ਮੁਲਾਂਕਣ ਤੁਹਾਨੂੰ ਆਪਣੀਆਂ ਸਿੱਖਿਆ ਸੰਬੰਧੀ ਸ਼ਕਤੀਆਂ ਅਤੇ ਦਿਲਚਸਪੀਆਂ ਨੂੰ ਸਮਝਣ ਵਿੱਚ ਮਦਦ ਕਰੇਗਾ। ਆਪਣੀਆਂ ਤਰਜੀਹਾਂ ਅਤੇ ਕੁਦਰਤੀ ਰੁਚੀਆਂ ਦੇ ਆਧਾਰ ਤੇ ਹਰੇਕ ਸਵਾਲ ਦਾ ਇਮਾਨਦਾਰੀ ਨਾਲ ਜਵਾਬ ਦਿਓ।",
+    ks: "یہ جانچ چھ توہنز آپنیت تعلیمی صلاحیات تہ دلچسپیت سمجنہ منز مدد کران۔ آپنیت ترجیحات تہ فطری رجحانات کی بنیادس پیٹھ ہر سوال سنز دیانتداری سان جواب دیو۔",
+    doi: "यह मूल्यांकन आपको अपनी शैक्षणिक शक्तियों और रुचियों को समझने में मदद करेगा। अपनी प्राथमिकताओं और प्राकृतिक झुकाव के आधार पर प्रत्येक प्रश्न का ईमानदारी से उत्तर दें।"
+  },
+  assessmentCoverage: {
+    en: "Assessment Coverage",
+    hi: "मूल्यांकन कवरेज",
+    mr: "मूल्यमापन कव्हरेज",
+    ur: "تشخیص کوریج",
+    pa: "ਮੁਲਾਂਕਣ ਕਵਰੇਜ",
+    ks: "جانچ کوریج",
+    doi: "मूल्यांकन कवरेज"
+  },
+  streamCoverage: {
+    en: "Stream Coverage",
+    hi: "स्ट्रीम कवरेज",
+    mr: "प्रवाह कव्हरेज",
+    ur: "سٹریم کوریج",
+    pa: "ਸਟ੍ਰੀਮ ਕਵਰੇਜ",
+    ks: "سٹریم کوریج",
+    doi: "स्ट्रीम कवरेज"
+  },
+  submitting: {
+    en: "Submitting...",
+    hi: "जमा कर रहे हैं...",
+    mr: "सबमिट करत आहे...",
+    ur: "جمع کر رہے ہیں...",
+    pa: "ਜਮ੍ਹਾਂ ਕਰ ਰਹੇ ਹਾਂ...",
+    ks: "جمع کران...",
+    doi: "जमा कर रहे हैं..."
   }
 };
 
@@ -363,4 +437,17 @@ export function getTranslation(key: string, language: string = 'en'): string {
   
   // Try the requested language, fallback to English
   return translation[language as keyof typeof translation] || translation.en || key;
+}
+
+// Helper function to get formatted quiz progress text
+export function getQuizProgressText(current: number, total: number, language: string = 'en'): string {
+  const questionText = getTranslation('questionOf', language);
+  const ofText = getTranslation('of', language);
+  return `${questionText} ${current} ${ofText} ${total}`;
+}
+
+// Helper function to get formatted progress percentage
+export function getProgressText(percentage: number, language: string = 'en'): string {
+  const progressText = getTranslation('progress', language);
+  return `${progressText}: ${percentage}%`;
 }

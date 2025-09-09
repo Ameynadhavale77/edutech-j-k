@@ -222,18 +222,17 @@ export default function Quiz() {
             <Card className="max-w-2xl mx-auto">
               <CardHeader>
                 <CardTitle className="text-center" data-testid="text-ready-title">
-                  Ready to Get Started?
+                  {getTranslation("readyToStart", currentLanguage)}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center space-y-4">
                   <p className="text-muted-foreground" data-testid="text-quiz-instructions">
-                    This assessment will help you understand your academic strengths and interests. 
-                    Answer each question honestly based on your preferences and natural inclinations.
+                    {getTranslation("quizInstructions", currentLanguage)}
                   </p>
                   <div className="grid md:grid-cols-2 gap-4 text-sm">
                     <div className="bg-muted rounded-lg p-4">
-                      <h4 className="font-semibold text-foreground mb-2">Assessment Coverage</h4>
+                      <h4 className="font-semibold text-foreground mb-2">{getTranslation("assessmentCoverage", currentLanguage)}</h4>
                       <ul className="space-y-1 text-muted-foreground">
                         <li>• Interest analysis</li>
                         <li>• Aptitude evaluation</li>
@@ -242,7 +241,7 @@ export default function Quiz() {
                       </ul>
                     </div>
                     <div className="bg-muted rounded-lg p-4">
-                      <h4 className="font-semibold text-foreground mb-2">Stream Coverage</h4>
+                      <h4 className="font-semibold text-foreground mb-2">{getTranslation("streamCoverage", currentLanguage)}</h4>
                       <ul className="space-y-1 text-muted-foreground">
                         <li>• Science & Engineering</li>
                         <li>• Medical & Healthcare</li>
@@ -302,7 +301,7 @@ export default function Quiz() {
                   {mutation.isPending ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                      Submitting...
+                      {getTranslation("submitting", currentLanguage)}
                     </>
                   ) : isLastQuestion ? (
                     <>

@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/LanguageSwitcher";
+import { getQuizProgressText, getProgressText } from "@/lib/translations";
 
 interface QuizOption {
   id: string;
@@ -21,6 +23,8 @@ export default function QuizQuestion({
   questionNumber,
   totalQuestions,
 }: QuizQuestionProps) {
+  const currentLanguage = useLanguage();
+  
   // Handle both string (legacy) and object (new translated) question formats
   const questionText = typeof question === 'string' ? question : question?.question || '';
   const options = typeof question === 'object' && question?.options ? question.options : [];
@@ -29,10 +33,10 @@ export default function QuizQuestion({
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm text-muted-foreground" data-testid="text-question-progress">
-            Question {questionNumber} of {totalQuestions}
+            {getQuizProgressText(questionNumber, totalQuestions, currentLanguage)}
           </span>
           <span className="text-sm text-muted-foreground" data-testid="text-progress-percent">
-            Progress: {Math.round((questionNumber / totalQuestions) * 100)}%
+            {getProgressText(Math.round((questionNumber / totalQuestions) * 100), currentLanguage)}
           </span>
         </div>
         <div className="w-full bg-muted rounded-full h-2">
