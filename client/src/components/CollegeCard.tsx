@@ -7,6 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useLanguage } from "@/components/LanguageSwitcher";
+import { getTranslation } from "@/lib/translations";
 
 interface College {
   name: string;
@@ -25,6 +27,7 @@ interface CollegeCardProps {
 }
 
 export default function CollegeCard({ college, isSaved = false }: CollegeCardProps) {
+  const currentLanguage = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isBookmarked, setIsBookmarked] = useState(isSaved);
@@ -99,7 +102,7 @@ export default function CollegeCard({ college, isSaved = false }: CollegeCardPro
               {college.hostel === "Available" && (
                 <span className="text-emerald-600 dark:text-emerald-400" data-testid="text-hostel-available">
                   <Users className="w-4 h-4 inline mr-1" />
-                  Hostel Available
+                  {getTranslation("hostelAvailable", currentLanguage)}
                 </span>
               )}
             </div>
@@ -167,7 +170,7 @@ export default function CollegeCard({ college, isSaved = false }: CollegeCardPro
             data-testid="button-view-details"
           >
             <Link href={`/colleges/${encodeURIComponent(college.name)}`}>
-              View Details
+              {getTranslation("viewDetails", currentLanguage)}
               <ArrowRight className="w-3 h-3 ml-1" />
             </Link>
           </Button>

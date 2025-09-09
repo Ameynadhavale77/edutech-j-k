@@ -15,6 +15,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import CollegeCard from "@/components/CollegeCard";
 import collegesData from "@/data/colleges.json";
+import { useLanguage } from "@/components/LanguageSwitcher";
+import { getTranslation } from "@/lib/translations";
 
 interface FilterState {
   search: string;
@@ -26,6 +28,7 @@ interface FilterState {
 }
 
 export default function Colleges() {
+  const currentLanguage = useLanguage();
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     location: "all",
@@ -155,10 +158,10 @@ export default function Colleges() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-4" data-testid="text-colleges-title">
-            College Directory
+            {getTranslation("collegeDirectory", currentLanguage)}
           </h1>
           <p className="text-muted-foreground" data-testid="text-colleges-description">
-            Discover the best colleges in Jammu & Kashmir tailored to your preferences
+            {getTranslation("discoverCollegesDesc", currentLanguage)}
           </p>
         </div>
 

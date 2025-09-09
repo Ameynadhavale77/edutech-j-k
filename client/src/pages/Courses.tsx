@@ -27,6 +27,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CourseCard from "@/components/CourseCard";
 import coursesData from "@/data/courses.json";
+import { useLanguage } from "@/components/LanguageSwitcher";
+import { getTranslation, getCategoryTranslation } from "@/lib/translations";
 
 const categoryIcons = {
   engineering: "🔧",
@@ -38,6 +40,7 @@ const categoryIcons = {
 };
 
 export default function Courses() {
+  const currentLanguage = useLanguage();
   const [location] = useLocation();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
@@ -86,10 +89,10 @@ export default function Courses() {
   });
 
   const categories = [
-    { id: "all", name: "All Categories", count: coursesData.length },
+    { id: "all", name: getCategoryTranslation("all", currentLanguage), count: coursesData.length },
     ...Object.keys(categoryIcons).map(cat => ({
       id: cat,
-      name: cat.charAt(0).toUpperCase() + cat.slice(1),
+      name: getCategoryTranslation(cat, currentLanguage),
       count: coursesData.filter(c => c.category === cat).length
     }))
   ];
@@ -103,10 +106,10 @@ export default function Courses() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-4" data-testid="text-courses-title">
-            Course Explorer
+            {getTranslation("courseExplorer", currentLanguage)}
           </h1>
           <p className="text-muted-foreground" data-testid="text-courses-description">
-            Discover detailed career pathways and make informed decisions about your future
+            {getTranslation("discoverCoursesDesc", currentLanguage)}
           </p>
         </div>
 

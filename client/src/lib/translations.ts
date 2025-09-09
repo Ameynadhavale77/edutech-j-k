@@ -428,6 +428,62 @@ export const translations = {
     pa: "ਜਮ੍ਹਾਂ ਕਰ ਰਹੇ ਹਾਂ...",
     ks: "جمع کران...",
     doi: "जमा कर रहे हैं..."
+  },
+
+  // Colleges page
+  courseExplorer: {
+    en: "Course Explorer",
+    hi: "कोर्स क्षेत्र अन्वेषक",
+    mr: "कोर्स एक्सप्लोरर",
+    ur: "کورس ایکسپلورر",
+    pa: "ਕੋਰਸ ਐਕਸਪਲੋਰਰ",
+    ks: "کورس ایکسپلورر",
+    doi: "कोर्स क्षेत्र अन्वेषक"
+  },
+  discoverCollegesDesc: {
+    en: "Discover the best colleges in Jammu & Kashmir tailored to your preferences",
+    hi: "आपकी पसंद के अनुसार जम्मू-कश्मीर के सर्वोत्तम कॉलेजों को खोजें",
+    mr: "तुमच्या पसंतीनुसार जम्मू-काश्मीरमधील सर्वोत्तम महाविद्यालयांचा शोध घ्या",
+    ur: "آپ کی ترجیحات کے مطابق جموں و کشمیر کے بہترین کالجز کا انکشاف کریں",
+    pa: "ਤੁਹਾਡੀਆਂ ਤਰਜੀਹਾਂ ਦੇ ਅਨੁਸਾਰ ਜੰਮੂ-ਕਸ਼ਮੀਰ ਦੇ ਉਤਮ ਕਾਲਜਾਂ ਨੂੰ ਖੋਜੋ",
+    ks: "توہنز ترجیحات کی مطابق جموں کشمیر ہندز بہترین کالجن انکشاف کرو",
+    doi: "आपकी पसंद के अनुसार जम्मू-कश्मीर के सर्वोत्तम कॉलेजों को खोजें"
+  },
+  discoverCoursesDesc: {
+    en: "Discover detailed career pathways and make informed decisions about your future",
+    hi: "विस्तृत करियर मार्ग खोजें और अपने भविष्य के बारे में जानकारी पर आधारित प्राथमिकताएँ निर्धारित करें",
+    mr: "तपशीलवार करियर मार्गांचा शोध घ्या आणि तुमच्या भविष्याबाबत माहितीपूर्ण निर्णय घ्या",
+    ur: "تفصیلی کیریر کے راستے اور اپنے مستقبل کے بارے میں باخبر فیصلے کریں",
+    pa: "ਵਿਸਤਾਰ ਵਿੱਚ ਕੈਰੀਅਰ ਰਾਹਵਾਂ ਦੀ ਖੋਜ ਕਰੋ ਅਤੇ ਆਪਣੇ ਭਵਿੱਖ ਲਈ ਜਾਣਕਾਰੀ ਭਰਪੂਰ ਫੈਸਲੇ ਲਓ",
+    ks: "تفصیلی کیریر راہ خوجو تہ آپنیت مستقبل باپت جانکاری پیٹھ دقیق فیصلے کرو",
+    doi: "विस्तृत करियर मार्ग खोजें और अपने भविष्य के बारे में जानकारी पर आधारित प्राथमिकताएँ निर्धारित करें"
+  },
+  viewDetails: {
+    en: "View Details",
+    hi: "विवरण देखें",
+    mr: "तपशील पहा",
+    ur: "تفصیلات دیکھیں",
+    pa: "ਵੇਰਵੇ ਵੇਖੋ",
+    ks: "تفصیلات اکھو",
+    doi: "विवरण देखें"
+  },
+  allCategories: {
+    en: "All Categories",
+    hi: "सभी श्रेणियां",
+    mr: "सर्व श्रेणी",
+    ur: "تمام اقسام",
+    pa: "ਸਾਰੀਆਂ ਕੈਟਗਰੀਆਂ",
+    ks: "تمام اقسام",
+    doi: "सभी श्रेणियां"
+  },
+  hostelAvailable: {
+    en: "Hostel Available",
+    hi: "हॉस्टल उपलब्ध",
+    mr: "हॉस्टेल उपलब्ध",
+    ur: "ہاسٹل دستیاب",
+    pa: "ਹਾਸਟਲ ਉਪਲਬਧ",
+    ks: "ہاسٹل دستیاب",
+    doi: "हॉस्टल उपलब्ध"
   }
 };
 
@@ -450,4 +506,12 @@ export function getQuizProgressText(current: number, total: number, language: st
 export function getProgressText(percentage: number, language: string = 'en'): string {
   const progressText = getTranslation('progress', language);
   return `${progressText}: ${percentage}%`;
+}
+
+// Helper function for category names
+export function getCategoryTranslation(category: string, language: string = 'en'): string {
+  if (category === 'all') return getTranslation('allCategories', language);
+  
+  const categoryKey = `category${category.charAt(0).toUpperCase() + category.slice(1)}`;
+  return getTranslation(categoryKey, language) || category.charAt(0).toUpperCase() + category.slice(1);
 }
