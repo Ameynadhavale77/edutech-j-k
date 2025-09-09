@@ -8,8 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import QuizQuestion from "@/components/QuizQuestion";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { useLanguage, getText } from "@/components/LanguageSwitcher";
-import quizQuestionsMultilingual from "@/data/quiz-questions-multilingual.json";
+import { useLanguage } from "@/components/LanguageSwitcher";
+import { useTranslation } from "@/hooks/useTranslation";
+import { getTranslation } from "@/lib/translations";
+import quizQuestions from "@/data/quiz-questions.json";
 
 interface QuizAnswers {
   [questionId: number]: string;
@@ -28,12 +30,14 @@ export default function Quiz() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const currentLanguage = useLanguage();
+  const { translateQuizQuestion, isTranslating } = useTranslation();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [isStarted, setIsStarted] = useState(false);
+  const [translatedQuestion, setTranslatedQuestion] = useState<any>(null);
 
-  const currentQuestion = quizQuestionsMultilingual[currentQuestionIndex];
-  const totalQuestions = quizQuestionsMultilingual.length;
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const totalQuestions = quizQuestions.length;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const isAnswered = answers[currentQuestion?.id] !== undefined;
 
@@ -47,7 +51,7 @@ export default function Quiz() {
       vocational: 0,
     };
 
-    quizQuestionsMultilingual.forEach((question) => {
+    quizQuestions.forEach((question) => {
       const selectedOptionId = answers[question.id];
       if (selectedOptionId) {
         const selectedOption = question.options.find(opt => opt.id === selectedOptionId);

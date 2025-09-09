@@ -8,18 +8,20 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import LanguageSwitcher from "./LanguageSwitcher";
+import LanguageSwitcher, { useLanguage } from "./LanguageSwitcher";
+import { getTranslation } from "@/lib/translations";
 
 export default function Navigation() {
   const [location] = useLocation();
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const currentLanguage = useLanguage();
 
   const navItems = [
-    { href: "/", label: "Dashboard" },
-    { href: "/colleges", label: "Colleges" },
-    { href: "/courses", label: "Courses" },
-    { href: "/quiz", label: "Assessment" },
+    { href: "/", label: getTranslation("dashboard", currentLanguage) },
+    { href: "/colleges", label: getTranslation("colleges", currentLanguage) },
+    { href: "/courses", label: getTranslation("courses", currentLanguage) },
+    { href: "/quiz", label: getTranslation("assessment", currentLanguage) },
   ];
 
   const NavLinks = ({ isMobile = false }) => (
@@ -69,14 +71,14 @@ export default function Navigation() {
               )}
             </Button>
             <Button asChild data-testid="button-profile">
-              <Link href="/profile">Profile</Link>
+              <Link href="/profile">{getTranslation("profile", currentLanguage)}</Link>
             </Button>
             <Button 
               variant="destructive" 
               asChild
               data-testid="button-logout"
             >
-              <a href="/api/logout">Logout</a>
+              <a href="/api/logout">{getTranslation("logout", currentLanguage)}</a>
             </Button>
           </div>
 
@@ -109,7 +111,7 @@ export default function Navigation() {
                     </div>
                     <Button asChild className="w-full justify-start" data-testid="button-profile-mobile">
                       <Link href="/profile" onClick={() => setIsOpen(false)}>
-                        Profile
+                        {getTranslation("profile", currentLanguage)}
                       </Link>
                     </Button>
                     <Button 
@@ -118,7 +120,7 @@ export default function Navigation() {
                       className="w-full justify-start"
                       data-testid="button-logout-mobile"
                     >
-                      <a href="/api/logout">Logout</a>
+                      <a href="/api/logout">{getTranslation("logout", currentLanguage)}</a>
                     </Button>
                   </div>
                 </div>

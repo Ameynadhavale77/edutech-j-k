@@ -29,7 +29,7 @@ export function useTranslation() {
 
     try {
       setIsTranslating(true);
-      const response = await apiRequest('POST', '/api/translate', {
+      const response: any = await apiRequest('POST', '/api/translate', {
         text,
         targetLanguage: language
       });
