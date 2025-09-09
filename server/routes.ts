@@ -9,6 +9,7 @@ import {
   insertSavedCourseSchema,
 } from "@shared/schema";
 import { z } from "zod";
+import { translateText, translateQuizQuestion } from "./translationService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -257,6 +258,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user activity:", error);
       res.status(500).json({ message: "Failed to fetch user activity" });
+    }
+  });
+
+  // Translation API endpoints
+  app.post('/api/translate', async (req, res) => {
+    try {
+      const { text, targetLanguage } = req.body;
+      
+      if (!text || !targetLanguage) {
+        return res.status(400).json({ message: "Text and target language are required" });
+      }
+      
+      const translatedText = await translateText(text, targetLanguage);
+      res.json({ translatedText });
+    } catch (error: any) {
+      console.error("Translation error:", error);
+      res.status(500).json({ message: "Translation failed" });
+    }
+  });
+
+  app.post('/api/translate/quiz-question', async (req, res) => {
+    try {
+      const { question, targetLanguage } = req.body;
+      
+      if (!question || !targetLanguage) {
+        return res.status(400).json({ message: "Question and target language are required" });
+      }
+      
+      const translatedQuestion = await translateQuizQuestion(question, targetLanguage);
+      res.json(translatedQuestion);
+    } catch (error: any) {
+      console.error("Quiz translation error:", error);
+      res.status(500).json({ message: "Quiz translation failed" });
     }
   });
 
