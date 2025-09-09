@@ -98,7 +98,7 @@ export default function Home() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Recommended Colleges</p>
+                  <p className="text-muted-foreground text-sm">{getTranslation("recommendedColleges", currentLanguage)}</p>
                   <p className="text-2xl font-bold text-foreground">12</p>
                 </div>
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -112,7 +112,7 @@ export default function Home() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Career Paths</p>
+                  <p className="text-muted-foreground text-sm">{getTranslation("careerPaths", currentLanguage)}</p>
                   <p className="text-2xl font-bold text-foreground">8</p>
                 </div>
                 <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center">
@@ -126,7 +126,7 @@ export default function Home() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Saved Items</p>
+                  <p className="text-muted-foreground text-sm">{getTranslation("savedItems", currentLanguage)}</p>
                   <p className="text-2xl font-bold text-foreground">{savedColleges.length + savedCourses.length}</p>
                 </div>
                 <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900 rounded-lg flex items-center justify-center">
@@ -140,7 +140,7 @@ export default function Home() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm">Upcoming Deadlines</p>
+                  <p className="text-muted-foreground text-sm">{getTranslation("upcomingDeadlines", currentLanguage)}</p>
                   <p className="text-2xl font-bold text-foreground">{timeline.length}</p>
                 </div>
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
@@ -159,7 +159,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2" data-testid="text-recommendations-title">
                   <TrendingUp className="w-5 h-5" />
-                  Recommended for You
+                  {getTranslation("recommendedForYou", currentLanguage)}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -185,7 +185,7 @@ export default function Home() {
                         <span className="text-xs text-muted-foreground">₹15K-30K/sem</span>
                       </div>
                       <Button variant="link" size="sm" asChild data-testid="button-learn-more">
-                        <Link href="/colleges/University of Kashmir">Learn More</Link>
+                        <Link href="/colleges/University of Kashmir">{getTranslation("learnMore", currentLanguage)}</Link>
                       </Button>
                     </div>
                   </CardContent>
@@ -209,7 +209,7 @@ export default function Home() {
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-muted-foreground">Avg. Salary: ₹4-8 LPA</span>
                       <Button variant="link" size="sm" asChild data-testid="button-explore-career">
-                        <Link href="/courses">Explore Career Path</Link>
+                        <Link href="/courses">{getTranslation("exploreCareerPath", currentLanguage)}</Link>
                       </Button>
                     </div>
                   </CardContent>
