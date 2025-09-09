@@ -15,9 +15,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/components/LanguageSwitcher";
+import { getTranslation } from "@/lib/translations";
 
 export default function Home() {
   const { user } = useAuth();
+  const currentLanguage = useLanguage();
 
   const { data: profile } = useQuery({
     queryKey: ["/api/profile"],
@@ -60,13 +63,13 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-foreground mb-2" data-testid="text-welcome">
-                  Welcome back, {userName}!
+                  {getTranslation("welcomeBack", currentLanguage)}, {userName}!
                 </h1>
-                <p className="text-muted-foreground">Here's your personalized educational dashboard</p>
+                <p className="text-muted-foreground">{getTranslation("dashboardDescription", currentLanguage)}</p>
                 {profile && !profile.profileCompleted && (
                   <div className="mt-2">
                     <Badge variant="outline" className="text-amber-600 border-amber-600">
-                      Profile Incomplete
+                      {getTranslation("profileIncomplete", currentLanguage)}
                     </Badge>
                   </div>
                 )}

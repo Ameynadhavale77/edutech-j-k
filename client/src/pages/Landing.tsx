@@ -2,9 +2,13 @@ import { useState } from "react";
 import { GraduationCap, University, Brain, Route, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ThemeProvider";
+import { useLanguage } from "@/components/LanguageSwitcher";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { getTranslation } from "@/lib/translations";
 
 export default function Landing() {
   const { theme, toggleTheme } = useTheme();
+  const currentLanguage = useLanguage();
 
   return (
     <div className="min-h-screen bg-background">
@@ -19,6 +23,7 @@ export default function Landing() {
               <span className="font-bold text-xl text-foreground">EduPath J&K</span>
             </div>
             <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
               <Button
                 variant="ghost"
                 size="icon"
@@ -32,7 +37,7 @@ export default function Landing() {
                 )}
               </Button>
               <Button asChild data-testid="button-signin">
-                <a href="/api/login">Sign In</a>
+                <a href="/api/login">{getTranslation("signIn", currentLanguage)}</a>
               </Button>
             </div>
           </div>
@@ -45,12 +50,11 @@ export default function Landing() {
           <div className="max-w-4xl mx-auto text-center text-white">
             <div className="animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold mb-6" data-testid="text-hero-title">
-                Shape Your Future with
-                <span className="block text-yellow-300">Smart Career Guidance</span>
+                {getTranslation("heroTitle1", currentLanguage)}
+                <span className="block text-yellow-300">{getTranslation("heroTitle2", currentLanguage)}</span>
               </h1>
               <p className="text-xl md:text-2xl mb-8 text-blue-100" data-testid="text-hero-description">
-                Discover the perfect college and career path in Jammu & Kashmir with personalized recommendations, 
-                aptitude assessments, and comprehensive guidance.
+                {getTranslation("heroDescription", currentLanguage)}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
@@ -59,7 +63,7 @@ export default function Landing() {
                   asChild
                   data-testid="button-get-started"
                 >
-                  <a href="/api/login">Get Started Free</a>
+                  <a href="/api/login">{getTranslation("getStarted", currentLanguage)}</a>
                 </Button>
                 <Button 
                   size="lg"
@@ -68,7 +72,7 @@ export default function Landing() {
                   asChild
                   data-testid="button-learn-more"
                 >
-                  <a href="#features">Learn More</a>
+                  <a href="#features">{getTranslation("learnMore", currentLanguage)}</a>
                 </Button>
               </div>
             </div>
