@@ -127,11 +127,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       } else {
         // Fallback mode
-        const { register, login } = FallbackAuthService;
-        
         try {
           // Try to login first (if user exists)
-          const result = await login({ email, password: 'google_auth' });
+          const result = await FallbackAuthService.login({ email, password: 'google_auth' });
           
           // Set HTTP-only cookie
           res.cookie('token', result.token, {
@@ -144,7 +142,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           res.json({ user: result.user, message: 'Google login successful' });
         } catch {
           // User doesn't exist, create new one
-          const result = await register({
+          const result = await FallbackAuthService.register({
             email,
             password: 'google_auth',
             firstName: firstName || '',
