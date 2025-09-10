@@ -36,6 +36,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const authMiddlewareToUse = isMongoConnected ? authMiddleware : authMiddlewareFallback;
   
   console.log(`🔧 Using ${isMongoConnected ? 'MongoDB' : 'Fallback'} authentication system`);
+  console.log(`🔑 Google Client ID available: ${!!process.env.GOOGLE_CLIENT_ID}`);
+  console.log(`🔑 Vite Google Client ID available: ${!!process.env.VITE_GOOGLE_CLIENT_ID}`);
 
   // Google OAuth route
   app.post('/api/auth/google', async (req, res) => {
