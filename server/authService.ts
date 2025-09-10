@@ -34,9 +34,8 @@ export class AuthService {
 
   static generateToken(userId: string): string {
     const secret = this.getJWTSecret();
-    const expiresIn: string = process.env.JWT_EXPIRE || '7d';
-    const options: SignOptions = { expiresIn };
-    return jwt.sign({ userId }, secret, options);
+    const expiresIn = process.env.JWT_EXPIRE || '7d';
+    return jwt.sign({ userId }, secret, { expiresIn } as any);
   }
 
   static verifyToken(token: string): { userId: string } {
