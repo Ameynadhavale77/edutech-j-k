@@ -37,6 +37,135 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   console.log(`🔧 Using ${isMongoConnected ? 'MongoDB' : 'Fallback'} authentication system`);
 
+  // Google OAuth route
+  app.post('/api/auth/google', async (req, res) => {
+    try {
+      const { OAuth2Client } = await import('google-auth-library');
+      const client = new OAuth2Client();
+      
+      const { idToken } = req.body;
+
+      if (!idToken) {
+        return res.status(400).json({ message: 'ID token is required' });
+      }
+
+      // Verify the Google ID token
+      const ticket = await client.verifyIdToken({
+        idToken,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+
+      const payload = ticket.getPayload();
+      
+      if (!payload) {
+        return res.status(401).json({ message: 'Invalid Google token' });
+      }
+
+      // Extract user info from Google
+      const {
+        sub: googleId,
+        email,
+        given_name: firstName,
+        family_name: lastName,
+        picture: profileImageUrl,
+        email_verified: isVerified
+      } = payload;
+
+      if (!email) {
+        return res.status(400).json({ message: 'Email not provided by Google' });
+      }
+
+      if (isMongoConnected) {
+        // MongoDB flow
+        let user = await User.findOne({ email: email.toLowerCase() });
+        
+        if (!user) {
+          // Create new user
+          user = new User({
+            email: email.toLowerCase(),
+            googleId,
+            firstName: firstName || '',
+            lastName: lastName || '',
+            profileImageUrl: profileImageUrl || '',
+            isVerified: isVerified || false,
+            password: '', // Google users don't need password
+          });
+          await user.save();
+        } else {
+          // Update existing user with Google info
+          user.googleId = googleId;
+          user.firstName = firstName || user.firstName;
+          user.lastName = lastName || user.lastName;
+          user.profileImageUrl = profileImageUrl || user.profileImageUrl;
+          user.isVerified = isVerified || user.isVerified;
+          await user.save();
+        }
+
+        // Generate token
+        const token = authService.generateToken(user._id.toString());
+        
+        // Set HTTP-only cookie
+        res.cookie('token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        });
+
+        res.json({ 
+          user: {
+            id: user._id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            profileImageUrl: user.profileImageUrl,
+            isVerified: user.isVerified
+          }, 
+          message: 'Google login successful' 
+        });
+      } else {
+        // Fallback mode
+        const { register, login } = FallbackAuthService;
+        
+        try {
+          // Try to login first (if user exists)
+          const result = await login({ email, password: 'google_auth' });
+          
+          // Set HTTP-only cookie
+          res.cookie('token', result.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          });
+
+          res.json({ user: result.user, message: 'Google login successful' });
+        } catch {
+          // User doesn't exist, create new one
+          const result = await register({
+            email,
+            password: 'google_auth',
+            firstName: firstName || '',
+            lastName: lastName || ''
+          });
+          
+          // Set HTTP-only cookie
+          res.cookie('token', result.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          });
+
+          res.json({ user: result.user, message: 'Google registration successful' });
+        }
+      }
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      res.status(401).json({ message: 'Google authentication failed' });
+    }
+  });
+
   // Authentication routes
   app.post('/api/auth/register', async (req, res) => {
     try {
