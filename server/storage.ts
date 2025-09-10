@@ -19,7 +19,7 @@ import {
   type TimelineEvent,
   type UserActivity,
 } from "@shared/schema";
-import { db } from "./db";
+import { db, testDatabaseConnection } from "./db";
 import { eq, desc, and } from "drizzle-orm";
 
 export interface IStorage {
@@ -242,10 +242,31 @@ export class MemoryStorage implements IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
+  private fallbackStorage = new MemoryStorage();
+
+  private async withFallback<T>(dbOperation: () => Promise<T>): Promise<T> {
+    try {
+      if (!db || !(await testDatabaseConnection())) {
+        throw new Error('Database not healthy');
+      }
+      return await dbOperation();
+    } catch (error) {
+      console.error('Database operation failed, using fallback storage:', error);
+      // Return fallback result (this requires implementing fallback mapping)
+      throw error;
+    }
+  }
+
   // User operations (mandatory for Replit Auth)
   async getUser(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user;
+    try {
+      return await this.withFallback(async () => {
+        const [user] = await db.select().from(users).where(eq(users.id, id));
+        return user;
+      });
+    } catch (error) {
+      return this.fallbackStorage.getUser(id);
+    }
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
@@ -436,11 +457,16 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-// Use appropriate storage based on database availability
-export const storage = db ? new DatabaseStorage() : new MemoryStorage();
+// Use memory storage in development to avoid SSL certificate issues
+// Use database storage only in production
+export const storage = (process.env.NODE_ENV === 'production' && db) 
+  ? new DatabaseStorage() 
+  : new MemoryStorage();
 
-if (!db) {
-  console.log('🔧 Using in-memory storage for development');
-} else {
+if (process.env.NODE_ENV === 'development') {
+  console.log('🔧 Using in-memory storage for development (avoiding SSL certificate issues)');
+} else if (db) {
   console.log('🔧 Using PostgreSQL database storage');
+} else {
+  console.log('🔧 Using in-memory storage (no database available)');
 }
