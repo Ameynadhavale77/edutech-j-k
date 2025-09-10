@@ -4,6 +4,11 @@ import { connectMongoDB } from "./mongodb";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+// Set development defaults for environment variables
+if (process.env.NODE_ENV === 'development') {
+  process.env.JWT_SECRET = process.env.JWT_SECRET || 'dev-jwt-secret-key-for-testing';
+}
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

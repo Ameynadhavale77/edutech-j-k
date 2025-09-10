@@ -25,15 +25,17 @@ export default function QuizQuestion({
 }: QuizQuestionProps) {
   const currentLanguage = useLanguage();
   
-  // Handle both string (legacy) and object (new translated) question formats
-  const questionText = typeof question === 'string' ? question : question?.question || '';
-  const options = typeof question === 'object' && question?.options ? question.options : [];
-  
   // Helper function to get text in current language
   const getText = (text: string | Record<string, string>): string => {
     if (typeof text === 'string') return text;
     return text[currentLanguage] || text.en || '';
   };
+  
+  // Handle both string (legacy) and object (new translated) question formats  
+  const questionText = typeof question === 'string' ? question : 
+                       (typeof question?.question === 'string' ? question.question : 
+                        getText(question?.question || ''));
+  const options = typeof question === 'object' && question?.options ? question.options : [];
   return (
     <div className="slide-in" data-testid="quiz-question">
       <div className="mb-6">
