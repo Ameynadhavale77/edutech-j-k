@@ -46,23 +46,50 @@ export default function Courses() {
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [sortBy, setSortBy] = useState("popularity");
 
-  const { data: savedCourses = [] } = useQuery({
+  const { data: savedCourses } = useQuery({
     queryKey: ["/api/saved/courses"],
     retry: false,
-  }) as { data: any[] };
+  });
 
-  const savedCourseIds = (savedCourses || []).map((saved: any) => saved.courseId);
+  const safeSavedCourses = Array.isArray(savedCourses) ? savedCourses : [];
+  const savedCourseIds = safeSavedCourses.map((saved: any) => saved.courseId);
 
   // Handle direct course selection from URL hash
   useEffect(() => {
-    const hash = location.split('#')[1];
+    console.log('Window location hash:', window.location.hash);
+    const hash = window.location.hash.slice(1); // Remove the # symbol
+    console.log('Hash extracted:', hash);
     if (hash) {
       const course = coursesData.find(c => c.id === hash);
+      console.log('Course found:', course);
       if (course) {
         setSelectedCourse(course);
       }
+    } else {
+      // Clear selected course when no hash
+      setSelectedCourse(null);
     }
   }, [location]);
+
+  // Also listen for hash changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      console.log('Hash changed:', window.location.hash);
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const course = coursesData.find(c => c.id === hash);
+        console.log('Course found on hash change:', course);
+        if (course) {
+          setSelectedCourse(course);
+        }
+      } else {
+        setSelectedCourse(null);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const filteredCourses = coursesData.filter(course => {
     if (selectedCategory === "all") return true;

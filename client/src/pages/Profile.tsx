@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -73,20 +74,25 @@ export default function Profile() {
     retry: false,
   });
 
-  const { data: savedColleges = [] } = useQuery({
+  const { data: savedColleges } = useQuery({
     queryKey: ["/api/saved/colleges"],
     retry: false,
   });
 
-  const { data: savedCourses = [] } = useQuery({
+  const { data: savedCourses } = useQuery({
     queryKey: ["/api/saved/courses"],
     retry: false,
   });
 
-  const { data: assessments = [] } = useQuery({
+  const { data: assessments } = useQuery({
     queryKey: ["/api/assessments"],
     retry: false,
   });
+
+  // Safe array access with null checks
+  const safeColleges = Array.isArray(savedColleges) ? savedColleges : [];
+  const safeCourses = Array.isArray(savedCourses) ? savedCourses : [];
+  const safeAssessments = Array.isArray(assessments) ? assessments : [];
 
   const { data: activities = [] } = useQuery({
     queryKey: ["/api/activity"],
@@ -198,8 +204,8 @@ export default function Profile() {
   };
 
   const getLatestAssessment = () => {
-    if (assessments.length === 0) return null;
-    return assessments.reduce((latest, current) => 
+    if (safeAssessments.length === 0) return null;
+    return safeAssessments.reduce((latest, current) => 
       new Date(current.completedAt) > new Date(latest.completedAt) ? current : latest
     );
   };
@@ -647,15 +653,15 @@ export default function Profile() {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Saved Colleges</span>
-                      <span className="font-medium" data-testid="count-saved-colleges">{savedColleges.length}</span>
+                      <span className="font-medium" data-testid="count-saved-colleges">{safeColleges.length}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Saved Courses</span>
-                      <span className="font-medium" data-testid="count-saved-courses">{savedCourses.length}</span>
+                      <span className="font-medium" data-testid="count-saved-courses">{safeCourses.length}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Assessments Taken</span>
-                      <span className="font-medium" data-testid="count-assessments">{assessments.length}</span>
+                      <span className="font-medium" data-testid="count-assessments">{safeAssessments.length}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Activities Logged</span>
@@ -674,35 +680,47 @@ export default function Profile() {
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
+                    asChild
                     data-testid="button-view-saved-colleges"
                   >
-                    <University className="mr-2 h-4 w-4 text-primary" />
-                    View Saved Colleges ({savedColleges.length})
+                    <Link href="/colleges">
+                      <University className="mr-2 h-4 w-4 text-primary" />
+                      View Saved Colleges ({safeColleges.length})
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
+                    asChild
                     data-testid="button-view-saved-courses"
                   >
-                    <BookOpen className="mr-2 h-4 w-4 text-primary" />
-                    View Saved Courses ({savedCourses.length})
+                    <Link href="/courses">
+                      <BookOpen className="mr-2 h-4 w-4 text-primary" />
+                      View Saved Courses ({safeCourses.length})
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
+                    asChild
                     data-testid="button-assessment-history"
                   >
-                    <BarChart3 className="mr-2 h-4 w-4 text-primary" />
-                    Assessment History
+                    <Link href="/quiz/results">
+                      <BarChart3 className="mr-2 h-4 w-4 text-primary" />
+                      Assessment History
+                    </Link>
                   </Button>
                   <Separator className="my-2" />
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
+                    asChild
                     data-testid="button-account-settings"
                   >
-                    <Settings className="mr-2 h-4 w-4 text-primary" />
-                    Account Settings
+                    <Link href="/profile">
+                      <Settings className="mr-2 h-4 w-4 text-primary" />
+                      Account Settings
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
