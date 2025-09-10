@@ -2,8 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { authMiddleware, optionalAuth, type AuthRequest } from "./authMiddleware";
+import { authMiddlewareFallback, optionalAuthFallback } from "./authMiddlewareFallback";
 import { AuthService } from "./authService";
+import { FallbackAuthService } from "./fallbackAuth";
 import { User, UserProfile } from "./mongodb";
+import mongoose from "mongoose";
 import {
   insertUserProfileSchema,
   insertAssessmentSchema,
@@ -27,11 +30,18 @@ const loginSchema = z.object({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Check if MongoDB is connected
+  const isMongoConnected = mongoose.connection.readyState === 1;
+  const authService = isMongoConnected ? AuthService : FallbackAuthService;
+  const authMiddlewareToUse = isMongoConnected ? authMiddleware : authMiddlewareFallback;
+  
+  console.log(`🔧 Using ${isMongoConnected ? 'MongoDB' : 'Fallback'} authentication system`);
+
   // Authentication routes
   app.post('/api/auth/register', async (req, res) => {
     try {
       const userData = registerSchema.parse(req.body);
-      const { user, token } = await AuthService.register(userData);
+      const { user, token } = await authService.register(userData);
       
       // Set HTTP-only cookie
       res.cookie('token', token, {
@@ -55,7 +65,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/login', async (req, res) => {
     try {
       const loginData = loginSchema.parse(req.body);
-      const { user, token } = await AuthService.login(loginData);
+      const { user, token } = await authService.login(loginData);
       
       // Set HTTP-only cookie
       res.cookie('token', token, {
@@ -81,32 +91,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: 'Logout successful' });
   });
 
-  app.get('/api/auth/user', authMiddleware, async (req: AuthRequest, res) => {
+  app.get('/api/auth/user', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user._id.toString();
-      
-      // Find or create user profile in MongoDB
-      let profile = await UserProfile.findOne({ userId });
-      
-      res.json({
-        id: req.user._id,
-        email: req.user.email,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-        profileImageUrl: req.user.profileImageUrl,
-        isVerified: req.user.isVerified,
-        profile,
-      });
+      if (isMongoConnected) {
+        const userId = req.user._id.toString();
+        // Find or create user profile in MongoDB
+        let profile = await UserProfile.findOne({ userId });
+        
+        res.json({
+          id: req.user._id,
+          email: req.user.email,
+          firstName: req.user.firstName,
+          lastName: req.user.lastName,
+          profileImageUrl: req.user.profileImageUrl,
+          isVerified: req.user.isVerified,
+          profile,
+        });
+      } else {
+        // Fallback mode - return user info without MongoDB profile
+        res.json({
+          id: req.user.id,
+          email: req.user.email,
+          firstName: req.user.firstName,
+          lastName: req.user.lastName,
+          profileImageUrl: req.user.profileImageUrl,
+          isVerified: req.user.isVerified,
+          profile: null, // No profile in fallback mode
+        });
+      }
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
     }
   });
 
-  // Profile routes
-  app.post('/api/profile', authMiddleware, async (req: AuthRequest, res) => {
+  // Profile routes  
+  app.post('/api/profile', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const profileData = insertUserProfileSchema.parse(req.body);
       
       const existingProfile = await storage.getUserProfile(userId);
@@ -131,9 +153,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/profile', authMiddleware, async (req: AuthRequest, res) => {
+  app.get('/api/profile', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const profile = await storage.getUserProfile(userId);
       
       if (!profile) {
@@ -149,9 +171,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Assessment routes
-  app.post('/api/assessments', authMiddleware, async (req: AuthRequest, res) => {
+  app.post('/api/assessments', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const assessmentData = insertAssessmentSchema.parse(req.body);
       
       const assessment = await storage.createAssessment(userId, assessmentData);
@@ -166,9 +188,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/assessments', authMiddleware, async (req: AuthRequest, res) => {
+  app.get('/api/assessments', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const assessments = await storage.getUserAssessments(userId);
       res.json(assessments);
     } catch (error) {
@@ -177,9 +199,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/assessments/latest/:type', authMiddleware, async (req: AuthRequest, res) => {
+  app.get('/api/assessments/latest/:type', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const { type } = req.params;
       
       const assessment = await storage.getLatestAssessment(userId, type);
@@ -196,9 +218,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Saved colleges routes
-  app.post('/api/saved/colleges', authMiddleware, async (req: AuthRequest, res) => {
+  app.post('/api/saved/colleges', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const collegeData = insertSavedCollegeSchema.parse(req.body);
       
       const savedCollege = await storage.saveCollege(userId, collegeData);
@@ -213,9 +235,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/saved/colleges', authMiddleware, async (req: AuthRequest, res) => {
+  app.get('/api/saved/colleges', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const savedColleges = await storage.getSavedColleges(userId);
       res.json(savedColleges);
     } catch (error) {
@@ -224,9 +246,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/saved/colleges/:name', authMiddleware, async (req: AuthRequest, res) => {
+  app.delete('/api/saved/colleges/:name', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const { name } = req.params;
       
       const removed = await storage.removeSavedCollege(userId, decodeURIComponent(name));
@@ -242,9 +264,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Saved courses routes
-  app.post('/api/saved/courses', authMiddleware, async (req: AuthRequest, res) => {
+  app.post('/api/saved/courses', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const courseData = insertSavedCourseSchema.parse(req.body);
       
       const savedCourse = await storage.saveCourse(userId, courseData);
@@ -259,9 +281,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/saved/courses', authMiddleware, async (req: AuthRequest, res) => {
+  app.get('/api/saved/courses', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const savedCourses = await storage.getSavedCourses(userId);
       res.json(savedCourses);
     } catch (error) {
@@ -270,9 +292,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/saved/courses/:id', authMiddleware, async (req: AuthRequest, res) => {
+  app.delete('/api/saved/courses/:id', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const { id } = req.params;
       
       const removed = await storage.removeSavedCourse(userId, id);
@@ -299,9 +321,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // User activity routes
-  app.get('/api/activity', authMiddleware, async (req: AuthRequest, res) => {
+  app.get('/api/activity', authMiddlewareToUse, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!._id.toString();
+      const userId = isMongoConnected ? req.user!._id.toString() : req.user!.id;
       const limit = parseInt(req.query.limit as string) || 10;
       
       const activities = await storage.getUserActivity(userId, limit);
