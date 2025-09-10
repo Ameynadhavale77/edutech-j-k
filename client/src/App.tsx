@@ -9,6 +9,8 @@ import Navigation from "@/components/Navigation";
 
 // Pages
 import Landing from "@/pages/Landing";
+import Login from "@/pages/Login";
+import Signup from "@/pages/Signup";
 import Home from "@/pages/Home";
 import ProfileSetup from "@/pages/ProfileSetup";
 import Quiz from "@/pages/Quiz";
@@ -38,7 +40,11 @@ function Router() {
       {isAuthenticated && <Navigation />}
       <Switch>
         {!isAuthenticated ? (
-          <Route path="/" component={Landing} />
+          <>
+            <Route path="/" component={Landing} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+          </>
         ) : (
           <>
             <Route path="/" component={Home} />

@@ -37,7 +37,7 @@ export default function Landing() {
                 )}
               </Button>
               <Button asChild data-testid="button-signin">
-                <a href="/api/login">{getTranslation("signIn", currentLanguage)}</a>
+                <a href="/login">{getTranslation("signIn", currentLanguage)}</a>
               </Button>
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function Landing() {
                   asChild
                   data-testid="button-get-started"
                 >
-                  <a href="/api/login">{getTranslation("getStarted", currentLanguage)}</a>
+                  <a href="/login">{getTranslation("getStarted", currentLanguage)}</a>
                 </Button>
                 <Button 
                   size="lg"
@@ -163,7 +163,7 @@ export default function Landing() {
             Join thousands of students who have found their perfect educational path through our platform.
           </p>
           <Button size="lg" asChild data-testid="button-get-started-cta">
-            <a href="/api/login">Get Started Today</a>
+            <a href="/signup">Get Started Today</a>
           </Button>
         </div>
       </section>
