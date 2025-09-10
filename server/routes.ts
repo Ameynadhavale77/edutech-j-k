@@ -1,7 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { authMiddleware, optionalAuth, type AuthRequest } from "./authMiddleware";
+import { AuthService } from "./authService";
+import { User, UserProfile } from "./mongodb";
 import {
   insertUserProfileSchema,
   insertAssessmentSchema,
@@ -11,39 +13,88 @@ import {
 import { z } from "zod";
 import { translateText, translateQuizQuestion } from "./translationService";
 
+// Validation schemas for auth
+const registerSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+});
+
+const loginSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(1, 'Password is required'),
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
-
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  // Authentication routes
+  app.post('/api/auth/register', async (req, res) => {
     try {
-      let userId: string;
-      let userInfo: any;
-
-      // Check if using development session
-      if (req.session?.user) {
-        userId = req.session.user.id;
-        userInfo = req.session.user;
-        
-        // Ensure user exists in database for dev session
-        await storage.upsertUser({
-          id: userId,
-          email: userInfo.email,
-          firstName: userInfo.firstName,
-          lastName: userInfo.lastName,
-          profileImageUrl: userInfo.profileImageUrl,
-        });
-      } else {
-        userId = req.user.claims.sub;
-        const user = await storage.getUser(userId);
-        userInfo = user;
-      }
+      const userData = registerSchema.parse(req.body);
+      const { user, token } = await AuthService.register(userData);
       
-      const profile = await storage.getUserProfile(userId);
+      // Set HTTP-only cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+      
+      res.status(201).json({ user, message: 'Registration successful' });
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: 'Validation error', errors: error.errors });
+      } else {
+        res.status(400).json({ message: error.message || 'Registration failed' });
+      }
+    }
+  });
+
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const loginData = loginSchema.parse(req.body);
+      const { user, token } = await AuthService.login(loginData);
+      
+      // Set HTTP-only cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+      
+      res.json({ user, message: 'Login successful' });
+    } catch (error: any) {
+      console.error('Login error:', error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: 'Validation error', errors: error.errors });
+      } else {
+        res.status(401).json({ message: error.message || 'Login failed' });
+      }
+    }
+  });
+
+  app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ message: 'Logout successful' });
+  });
+
+  app.get('/api/auth/user', authMiddleware, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user._id.toString();
+      
+      // Find or create user profile in MongoDB
+      let profile = await UserProfile.findOne({ userId });
       
       res.json({
-        ...userInfo,
+        id: req.user._id,
+        email: req.user.email,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        profileImageUrl: req.user.profileImageUrl,
+        isVerified: req.user.isVerified,
         profile,
       });
     } catch (error) {
@@ -53,9 +104,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Profile routes
-  app.post('/api/profile', isAuthenticated, async (req: any, res) => {
+  app.post('/api/profile', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const profileData = insertUserProfileSchema.parse(req.body);
       
       const existingProfile = await storage.getUserProfile(userId);
@@ -80,9 +131,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/profile', isAuthenticated, async (req: any, res) => {
+  app.get('/api/profile', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const profile = await storage.getUserProfile(userId);
       
       if (!profile) {
@@ -98,9 +149,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Assessment routes
-  app.post('/api/assessments', isAuthenticated, async (req: any, res) => {
+  app.post('/api/assessments', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const assessmentData = insertAssessmentSchema.parse(req.body);
       
       const assessment = await storage.createAssessment(userId, assessmentData);
@@ -115,9 +166,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/assessments', isAuthenticated, async (req: any, res) => {
+  app.get('/api/assessments', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const assessments = await storage.getUserAssessments(userId);
       res.json(assessments);
     } catch (error) {
@@ -126,9 +177,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/assessments/latest/:type', isAuthenticated, async (req: any, res) => {
+  app.get('/api/assessments/latest/:type', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const { type } = req.params;
       
       const assessment = await storage.getLatestAssessment(userId, type);
@@ -145,9 +196,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Saved colleges routes
-  app.post('/api/saved/colleges', isAuthenticated, async (req: any, res) => {
+  app.post('/api/saved/colleges', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const collegeData = insertSavedCollegeSchema.parse(req.body);
       
       const savedCollege = await storage.saveCollege(userId, collegeData);
@@ -162,9 +213,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/saved/colleges', isAuthenticated, async (req: any, res) => {
+  app.get('/api/saved/colleges', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const savedColleges = await storage.getSavedColleges(userId);
       res.json(savedColleges);
     } catch (error) {
@@ -173,9 +224,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/saved/colleges/:name', isAuthenticated, async (req: any, res) => {
+  app.delete('/api/saved/colleges/:name', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const { name } = req.params;
       
       const removed = await storage.removeSavedCollege(userId, decodeURIComponent(name));
@@ -191,9 +242,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Saved courses routes
-  app.post('/api/saved/courses', isAuthenticated, async (req: any, res) => {
+  app.post('/api/saved/courses', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const courseData = insertSavedCourseSchema.parse(req.body);
       
       const savedCourse = await storage.saveCourse(userId, courseData);
@@ -208,9 +259,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/saved/courses', isAuthenticated, async (req: any, res) => {
+  app.get('/api/saved/courses', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const savedCourses = await storage.getSavedCourses(userId);
       res.json(savedCourses);
     } catch (error) {
@@ -219,9 +270,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/saved/courses/:id', isAuthenticated, async (req: any, res) => {
+  app.delete('/api/saved/courses/:id', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const { id } = req.params;
       
       const removed = await storage.removeSavedCourse(userId, id);
@@ -248,9 +299,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // User activity routes
-  app.get('/api/activity', isAuthenticated, async (req: any, res) => {
+  app.get('/api/activity', authMiddleware, async (req: AuthRequest, res) => {
     try {
-      const userId = req.session?.user?.id || req.user.claims.sub;
+      const userId = req.user!._id.toString();
       const limit = parseInt(req.query.limit as string) || 10;
       
       const activities = await storage.getUserActivity(userId, limit);

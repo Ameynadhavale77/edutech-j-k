@@ -4,16 +4,23 @@ import mongoose from 'mongoose';
 export const connectMongoDB = async (): Promise<void> => {
   try {
     if (!process.env.MONGODB_URI) {
-      throw new Error('MONGODB_URI environment variable is required');
+      console.warn('MONGODB_URI environment variable not provided, running without MongoDB');
+      return;
     }
 
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGODB_URI);
+      await mongoose.connect(process.env.MONGODB_URI, {
+        serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      });
       console.log('Connected to MongoDB successfully');
     }
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    throw error;
+    console.warn('Running without MongoDB connection. Authentication will not work properly.');
+    // Don't throw error in development - allow server to start
+    if (process.env.NODE_ENV === 'production') {
+      throw error;
+    }
   }
 };
 
