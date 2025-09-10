@@ -11,7 +11,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useLanguage } from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getTranslation } from "@/lib/translations";
-import quizQuestions from "@/data/quiz-questions.json";
+import multilingualQuizQuestions from "@/data/quiz-questions-multilingual.json";
 
 interface QuizAnswers {
   [questionId: number]: string;
@@ -30,25 +30,22 @@ export default function Quiz() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const currentLanguage = useLanguage();
-  const { translateQuizQuestion, isTranslating } = useTranslation();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [isStarted, setIsStarted] = useState(false);
-  const [translatedQuestion, setTranslatedQuestion] = useState<any>(null);
 
-  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const currentQuestion = multilingualQuizQuestions[currentQuestionIndex];
+  const totalQuestions = multilingualQuizQuestions.length;
 
-  // Translate current question when language or question changes
-  useEffect(() => {
-    if (currentQuestion && currentLanguage !== 'en') {
-      translateQuizQuestion(currentQuestion, currentLanguage)
-        .then(setTranslatedQuestion)
-        .catch(() => setTranslatedQuestion(currentQuestion));
-    } else {
-      setTranslatedQuestion(currentQuestion);
-    }
-  }, [currentQuestion?.id, currentLanguage]); // Only depend on question ID and language
-  const totalQuestions = quizQuestions.length;
+  // Transform multilingual question to current language
+  const localizedQuestion = currentQuestion ? {
+    ...currentQuestion,
+    question: currentQuestion.question[currentLanguage as keyof typeof currentQuestion.question] || currentQuestion.question.en,
+    options: currentQuestion.options.map(option => ({
+      ...option,
+      text: option.text[currentLanguage as keyof typeof option.text] || option.text.en
+    }))
+  } : null;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const isAnswered = answers[currentQuestion?.id] !== undefined;
 
@@ -62,7 +59,7 @@ export default function Quiz() {
       vocational: 0,
     };
 
-    quizQuestions.forEach((question) => {
+    multilingualQuizQuestions.forEach((question) => {
       const selectedOptionId = answers[question.id];
       if (selectedOptionId) {
         const selectedOption = question.options.find(opt => opt.id === selectedOptionId);
@@ -273,9 +270,9 @@ export default function Quiz() {
         <div className="max-w-4xl mx-auto">
           <Card>
             <CardContent className="p-8">
-              {(translatedQuestion || currentQuestion) && (
+              {localizedQuestion && (
                 <QuizQuestion
-                  question={translatedQuestion || currentQuestion}
+                  question={localizedQuestion}
                   selectedAnswer={answers[currentQuestion.id] || null}
                   onAnswerSelect={handleAnswerSelect}
                   questionNumber={currentQuestionIndex + 1}

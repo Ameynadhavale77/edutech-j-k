@@ -4,7 +4,7 @@ import { getQuizProgressText, getProgressText } from "@/lib/translations";
 
 interface QuizOption {
   id: string;
-  text: string;
+  text: string | Record<string, string>;
   weights: Record<string, number>;
 }
 
@@ -28,6 +28,12 @@ export default function QuizQuestion({
   // Handle both string (legacy) and object (new translated) question formats
   const questionText = typeof question === 'string' ? question : question?.question || '';
   const options = typeof question === 'object' && question?.options ? question.options : [];
+  
+  // Helper function to get text in current language
+  const getText = (text: string | Record<string, string>): string => {
+    if (typeof text === 'string') return text;
+    return text[currentLanguage] || text.en || '';
+  };
   return (
     <div className="slide-in" data-testid="quiz-question">
       <div className="mb-6">
@@ -72,7 +78,7 @@ export default function QuizQuestion({
                   data-testid={`indicator-option-${option.id}`}
                 ></div>
               </div>
-              <span className="text-sm">{option.text}</span>
+              <span className="text-sm">{getText(option.text)}</span>
             </div>
           </Button>
         ))}
