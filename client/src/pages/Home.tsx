@@ -27,30 +27,37 @@ export default function Home() {
     retry: false,
   });
 
-  const { data: savedColleges = [] } = useQuery({
+  const { data: savedColleges } = useQuery({
     queryKey: ["/api/saved/colleges"],
     retry: false,
-  }) as { data: any[] };
+  });
 
-  const { data: savedCourses = [] } = useQuery({
+  const { data: savedCourses } = useQuery({
     queryKey: ["/api/saved/courses"],
     retry: false,
-  }) as { data: any[] };
+  });
 
-  const { data: assessments = [] } = useQuery({
+  const { data: assessments } = useQuery({
     queryKey: ["/api/assessments"],
     retry: false,
   });
 
-  const { data: activities = [] } = useQuery({
+  const { data: activities } = useQuery({
     queryKey: ["/api/activity"],
     retry: false,
-  }) as { data: any[] };
+  });
 
-  const { data: timeline = [] } = useQuery({
+  const { data: timeline } = useQuery({
     queryKey: ["/api/timeline"],
     retry: false,
-  }) as { data: any[] };
+  });
+
+  // Safe array access with null checks
+  const safeColleges = Array.isArray(savedColleges) ? savedColleges : [];
+  const safeCourses = Array.isArray(savedCourses) ? savedCourses : [];
+  const safeAssessments = Array.isArray(assessments) ? assessments : [];
+  const safeActivities = Array.isArray(activities) ? activities : [];
+  const safeTimeline = Array.isArray(timeline) ? timeline : [];
 
   const userName = user?.firstName || user?.email?.split('@')[0] || 'Student';
 
@@ -127,7 +134,7 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-muted-foreground text-sm">{getTranslation("savedItems", currentLanguage)}</p>
-                  <p className="text-2xl font-bold text-foreground">{savedColleges.length + savedCourses.length}</p>
+                  <p className="text-2xl font-bold text-foreground">{safeColleges.length + safeCourses.length}</p>
                 </div>
                 <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900 rounded-lg flex items-center justify-center">
                   <Bookmark className="text-amber-600 dark:text-amber-400 text-xl" />
@@ -141,7 +148,7 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-muted-foreground text-sm">{getTranslation("upcomingDeadlines", currentLanguage)}</p>
-                  <p className="text-2xl font-bold text-foreground">{timeline.length}</p>
+                  <p className="text-2xl font-bold text-foreground">{safeTimeline.length}</p>
                 </div>
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
                   <Calendar className="text-red-600 dark:text-red-400 text-xl" />
@@ -249,8 +256,8 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {activities.length > 0 ? (
-                    activities.slice(0, 5).map((activity, index) => (
+                  {safeActivities.length > 0 ? (
+                    safeActivities.slice(0, 5).map((activity, index) => (
                       <div key={activity.id} className="flex items-center space-x-3" data-testid={`activity-${index}`}>
                         <div className="w-2 h-2 bg-primary rounded-full"></div>
                         <p className="text-sm text-foreground">{activity.description}</p>
