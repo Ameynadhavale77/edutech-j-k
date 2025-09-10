@@ -16,7 +16,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/client/$1"
+      "dest": "/client/index.html"
     }
   ],
   "functions": {
@@ -24,5 +24,9 @@
       "runtime": "nodejs18.x"
     }
   },
-  "outputDirectory": "dist/public"
+  "env": {
+    "JWT_SECRET": "@jwt_secret",
+    "MONGODB_URI": "@mongodb_uri",
+    "SESSION_SECRET": "@session_secret"
+  }
 }
