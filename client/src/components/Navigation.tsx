@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { GraduationCap, Moon, Sun, Menu, X } from "lucide-react";
+import { GraduationCap, Moon, Sun, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,43 @@ import {
 } from "@/components/ui/sheet";
 import LanguageSwitcher, { useLanguage } from "./LanguageSwitcher";
 import { getTranslation } from "@/lib/translations";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function Navigation() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const currentLanguage = useLanguage();
+  const queryClient = useQueryClient();
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      // Clear all cached data
+      queryClient.clear();
+      // Redirect to login page
+      setLocation("/login");
+    },
+    onError: (error) => {
+      console.error("Logout error:", error);
+      // Even if logout fails on server, clear local cache and redirect
+      queryClient.clear();
+      setLocation("/login");
+    },
+  });
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   const navItems = [
     { href: "/", label: getTranslation("dashboard", currentLanguage) },
@@ -75,10 +106,12 @@ export default function Navigation() {
             </Button>
             <Button 
               variant="destructive" 
-              asChild
+              onClick={handleLogout}
+              disabled={logoutMutation.isPending}
               data-testid="button-logout"
             >
-              <a href="/api/logout">{getTranslation("logout", currentLanguage)}</a>
+              <LogOut className="h-4 w-4 mr-2" />
+              {logoutMutation.isPending ? "Signing out..." : getTranslation("logout", currentLanguage)}
             </Button>
           </div>
 
@@ -116,11 +149,16 @@ export default function Navigation() {
                     </Button>
                     <Button 
                       variant="destructive" 
-                      asChild 
+                      onClick={() => {
+                        setIsOpen(false);
+                        handleLogout();
+                      }}
+                      disabled={logoutMutation.isPending}
                       className="w-full justify-start"
                       data-testid="button-logout-mobile"
                     >
-                      <a href="/api/logout">{getTranslation("logout", currentLanguage)}</a>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      {logoutMutation.isPending ? "Signing out..." : getTranslation("logout", currentLanguage)}
                     </Button>
                   </div>
                 </div>

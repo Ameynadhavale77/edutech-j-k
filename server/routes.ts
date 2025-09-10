@@ -87,8 +87,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post('/api/auth/logout', (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/'
+    });
     res.json({ message: 'Logout successful' });
+  });
+
+  // Also support GET for backward compatibility
+  app.get('/api/logout', (req, res) => {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/'
+    });
+    res.redirect('/');
   });
 
   app.get('/api/auth/user', authMiddlewareToUse, async (req: AuthRequest, res) => {
