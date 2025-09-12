@@ -38,11 +38,11 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 
 // Middleware - CORS configuration for Replit environment
 const allowedOrigins = [
-  'https://ff7df17f-3b51-4411-89c8-576453e63683-00-2ire731j4nzm.pike.replit.dev',
+  process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : null,
   'https://replit.com',
   /https:\/\/.*\.replit\.dev$/,
   /https:\/\/.*\.pike\.replit\.dev$/
-];
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
