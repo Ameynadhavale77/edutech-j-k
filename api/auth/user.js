@@ -1,37 +1,11 @@
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-
-// Simple in-memory storage for demo (replace with your database)
-const users = new Map();
-
-// MongoDB User Schema (if using MongoDB)
-let User = null;
-if (process.env.MONGODB_URI) {
-  try {
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGODB_URI);
-    }
-    
-    const userSchema = new mongoose.Schema({
-      email: { type: String, required: true, unique: true, lowercase: true },
-      googleId: String,
-      firstName: String,
-      lastName: String,
-      profileImageUrl: String,
-      isVerified: { type: Boolean, default: false },
-      password: String,
-    }, { timestamps: true });
-    
-    User = mongoose.models.User || mongoose.model('User', userSchema);
-  } catch (error) {
-    console.warn('MongoDB connection failed, using in-memory storage');
-  }
-}
+import { db } from '../../server/db.js';
+import { users } from '../../shared/schema.js';
+import { eq } from 'drizzle-orm';
 
 function verifyToken(req) {
-  const token = req.headers.cookie?.split(';')
-    .find(c => c.trim().startsWith('token='))
-    ?.split('=')[1];
+  // Use req.cookies since we have cookie-parser middleware - prefer new version
+  const token = req.cookies?.token_v2 || req.cookies?.token;
 
   if (!token) {
     throw new Error('No token provided');
@@ -42,7 +16,6 @@ function verifyToken(req) {
 }
 
 export default async function handler(req, res) {
-  // CORS handled by main server - removing conflicting headers
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
@@ -54,28 +27,34 @@ export default async function handler(req, res) {
 
   try {
     const decoded = verifyToken(req);
+    console.log('Looking for user ID:', decoded.userId);
     
-    let user = null;
-
-    if (User && mongoose.connection.readyState === 1) {
-      // MongoDB flow
-      user = await User.findById(decoded.userId).select('-password');
-    } else {
-      // Fallback in-memory storage
-      for (const [email, userData] of users.entries()) {
-        if (userData.id === decoded.userId) {
-          user = userData;
-          break;
-        }
-      }
+    // Defensive check: ensure userId is a valid integer (handles legacy string IDs)
+    const userId = Number(decoded.userId);
+    if (!Number.isInteger(userId) || userId <= 0) {
+      console.log('Invalid user ID format, clearing both cookies');
+      res.setHeader('Set-Cookie', [
+        `token_v2=; Max-Age=0; HttpOnly; Secure; SameSite=None; Path=/`,
+        `token=; Max-Age=0; HttpOnly; Secure; SameSite=None; Path=/`
+      ]);
+      return res.status(401).json({ message: 'Invalid token format. Please login again.' });
     }
+    
+    // Find user in database
+    const [user] = await db.select().from(users).where(eq(users.id, userId));
 
     if (!user) {
+      console.log('User not found in database, clearing both cookies');
+      res.setHeader('Set-Cookie', [
+        `token_v2=; Max-Age=0; HttpOnly; Secure; SameSite=None; Path=/`,
+        `token=; Max-Age=0; HttpOnly; Secure; SameSite=None; Path=/`
+      ]);
       return res.status(401).json({ message: 'User not found' });
     }
 
+    console.log('Found user:', user.email);
     res.json({
-      id: user._id || user.id,
+      id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -84,6 +63,11 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Auth error:', error);
-    res.status(401).json({ message: 'Access denied. No token provided.' });
+    // Clear both cookies on any error (handles legacy and new tokens)
+    res.setHeader('Set-Cookie', [
+      `token_v2=; Max-Age=0; HttpOnly; Secure; SameSite=None; Path=/`,
+      `token=; Max-Age=0; HttpOnly; Secure; SameSite=None; Path=/`
+    ]);
+    res.status(401).json({ message: 'Access denied. Please login again.' });
   }
 }
