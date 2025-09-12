@@ -5,18 +5,31 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // API route imports - these are converted from Vercel serverless functions
+// @ts-ignore - API handlers are JS files without type declarations
 import activityHandler from '../api/activity.js';
+// @ts-ignore
 import assessmentsHandler from '../api/assessments.js';
+// @ts-ignore
 import collegesHandler from '../api/colleges.js';
+// @ts-ignore
 import coursesHandler from '../api/courses.js';
+// @ts-ignore
 import profileHandler from '../api/profile.js';
+// @ts-ignore
 import timelineHandler from '../api/timeline.js';
+// @ts-ignore
 import googleAuthHandler from '../api/auth/google.js';
+// @ts-ignore
 import loginHandler from '../api/auth/login.js';
+// @ts-ignore
 import logoutHandler from '../api/auth/logout.js';
+// @ts-ignore
 import registerHandler from '../api/auth/register.js';
+// @ts-ignore
 import userHandler from '../api/auth/user.js';
+// @ts-ignore
 import savedCollegesHandler from '../api/saved/colleges.js';
+// @ts-ignore
 import savedCoursesHandler from '../api/saved/courses.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -88,7 +101,7 @@ const clientBuildPath = path.join(__dirname, '../dist/public');
 app.use(express.static(clientBuildPath));
 
 // Handle client-side routing
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
   res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
 
