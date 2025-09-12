@@ -3,7 +3,7 @@ import { getTranslation } from "@/lib/translations";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { BookOpen, Calendar, Users, Trophy, AlertCircle, CheckCircle, Download } from "lucide-react";
+import { BookOpen, Trophy, AlertCircle, CheckCircle, Download } from "lucide-react";
 
 export default function Resources() {
   const currentLanguage = useLanguage();
@@ -185,6 +185,105 @@ export default function Resources() {
                       <span>Emphasize Class 12 syllabus</span>
                     </li>
                   </ul>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* JKCET Download Materials Section */}
+              <div>
+                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                  <Download className="w-5 h-5 text-primary" />
+                  Download JKCET Study Materials
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-base">Official Syllabus</h4>
+                    <div className="space-y-2">
+                      <a
+                        href="/resources/JKCET-Syllabus-2025.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JKCET Syllabus 2025</div>
+                          <div className="text-muted-foreground text-xs">Complete Physics, Chemistry & Math syllabus</div>
+                        </div>
+                      </a>
+                      <a
+                        href="/resources/JKCET-Syllabus-2024.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JKCET Syllabus 2024</div>
+                          <div className="text-muted-foreground text-xs">Previous year complete syllabus</div>
+                        </div>
+                      </a>
+                      <a
+                        href="/resources/JKCET-Syllabus-2023.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JKCET Syllabus 2023</div>
+                          <div className="text-muted-foreground text-xs">Reference syllabus for preparation</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-base">Previous Year Papers</h4>
+                    <div className="space-y-2">
+                      <a
+                        href="/resources/JKCET-Official-Paper-2018.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JKCET Official Paper 2018</div>
+                          <div className="text-muted-foreground text-xs">Complete question paper with solutions</div>
+                        </div>
+                      </a>
+                      <a
+                        href="/resources/JKCET-Question-Paper-2018.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JKCET 2018 Question Bank</div>
+                          <div className="text-muted-foreground text-xs">Practice questions with detailed solutions</div>
+                        </div>
+                      </a>
+                      <a
+                        href="/resources/JKCET-Question-Bank-BEd-2019.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">J&K B.Ed Entrance 2019</div>
+                          <div className="text-muted-foreground text-xs">Educational entrance reference material</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 p-3 bg-muted/30 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    <strong>Study Strategy:</strong> Download the latest syllabus first, then practice with previous year papers. Focus on understanding the pattern and solving techniques. Regular practice will boost your confidence for JKCET.
+                  </p>
                 </div>
               </div>
             </CardContent>

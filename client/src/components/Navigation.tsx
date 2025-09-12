@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { GraduationCap, Moon, Sun, Menu, X, LogOut } from "lucide-react";
+import { GraduationCap, Moon, Sun, Menu, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "@/components/ui/button";

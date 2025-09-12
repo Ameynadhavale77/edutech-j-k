@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { GraduationCap, University, Brain, Route, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ThemeProvider";
