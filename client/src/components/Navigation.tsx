@@ -82,7 +82,7 @@ export default function Navigation() {
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <GraduationCap className="text-primary-foreground w-5 h-5" />
             </div>
-            <span className="font-bold text-xl text-foreground">EduPath J&K</span>
+            <span className="font-bold text-xl text-foreground">Career Catalyst</span>
           </Link>
 
           {/* Desktop Navigation */}
