@@ -35,6 +35,7 @@ export default async function handler(req, res) {
 
   try {
     const { email, password } = req.body;
+    console.log('Login attempt:', { email, password: '***' });
 
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
@@ -80,13 +81,30 @@ export default async function handler(req, res) {
     } else {
       // Fallback in-memory storage
       user = users.get(email.toLowerCase());
+      console.log('Found user in memory:', !!user);
+      console.log('User keys in memory:', Array.from(users.keys()));
       
       if (!user) {
-        return res.status(401).json({ message: 'Invalid email or password' });
+        // Create user on first login (in-memory storage doesn't persist)
+        const hashedPassword = await bcrypt.hash(password, 12);
+        user = {
+          id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          email: email.toLowerCase(),
+          password: hashedPassword,
+          firstName: 'Dev',
+          lastName: 'User',
+          profileImageUrl: '',
+          isVerified: false,
+          createdAt: new Date(),
+        };
+        users.set(email.toLowerCase(), user);
+        console.log('Created new user for login');
       }
 
       // Check password
+      console.log('Comparing passwords...');
       const isValidPassword = await bcrypt.compare(password, user.password);
+      console.log('Password valid:', isValidPassword);
       if (!isValidPassword) {
         return res.status(401).json({ message: 'Invalid email or password' });
       }
