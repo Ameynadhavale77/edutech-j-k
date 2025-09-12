@@ -3,7 +3,7 @@ import { getTranslation } from "@/lib/translations";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { BookOpen, Calendar, Users, Trophy, AlertCircle, CheckCircle } from "lucide-react";
+import { BookOpen, Calendar, Users, Trophy, AlertCircle, CheckCircle, Download } from "lucide-react";
 
 export default function Resources() {
   const currentLanguage = useLanguage();
@@ -359,6 +359,81 @@ export default function Resources() {
                       <span className="ml-2 text-muted-foreground">Physics Wallah, Unacademy</span>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Download Materials Section */}
+              <div>
+                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                  <Download className="w-5 h-5 text-primary" />
+                  Download Study Materials
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-base">Question Papers & Solutions</h4>
+                    <div className="space-y-2">
+                      <a
+                        href="/resources/JEE-Physics-2024-Question-Papers.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JEE Physics 2024</div>
+                          <div className="text-muted-foreground text-xs">Question Papers with Answer Key</div>
+                        </div>
+                      </a>
+                      <a
+                        href="/resources/JEE-Chemistry-2024-Question-Papers.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JEE Chemistry 2024</div>
+                          <div className="text-muted-foreground text-xs">Question Papers with Answer Key</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-base">Latest Papers (2025)</h4>
+                    <div className="space-y-2">
+                      <a
+                        href="/resources/JEE-Main-2025-Question-Paper-Solution.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JEE Main 2025 Paper</div>
+                          <div className="text-muted-foreground text-xs">22 Jan Shift-1 with Solutions</div>
+                        </div>
+                      </a>
+                      <a
+                        href="/resources/JEE-Main-2025-Answer-Key.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                      >
+                        <Download className="w-4 h-4 text-primary flex-shrink-0" />
+                        <div>
+                          <div className="font-medium">JEE Main 2025 Answer Key</div>
+                          <div className="text-muted-foreground text-xs">Official Answer Key</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 p-3 bg-muted/30 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    <strong>Note:</strong> These are previous year papers and official answer keys. Practice regularly and analyze your performance to improve your JEE preparation.
+                  </p>
                 </div>
               </div>
             </CardContent>
