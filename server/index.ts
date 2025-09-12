@@ -23,10 +23,34 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 
-// Middleware
+// Middleware - CORS configuration for Replit environment
+const allowedOrigins = [
+  'https://ff7df17f-3b51-4411-89c8-576453e63683-00-2ire731j4nzm.pike.replit.dev',
+  'https://replit.com',
+  /https:\/\/.*\.replit\.dev$/,
+  /https:\/\/.*\.pike\.replit\.dev$/
+];
+
 app.use(cors({
-  origin: '*',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list or matches patterns
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (typeof allowed === 'string') {
+        return origin === allowed;
+      } else if (allowed instanceof RegExp) {
+        return allowed.test(origin);
+      }
+      return false;
+    });
+    
+    callback(null, isAllowed);
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

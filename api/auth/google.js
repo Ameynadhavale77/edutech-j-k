@@ -32,12 +32,7 @@ if (process.env.MONGODB_URI) {
 const client = new OAuth2Client();
 
 export default async function handler(req, res) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
-
+  // CORS handled by main server - removing conflicting headers
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
@@ -115,8 +110,8 @@ export default async function handler(req, res) {
         { expiresIn: '7d' }
       );
 
-      // Set HTTP-only cookie
-      res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}; Path=/`);
+      // Set HTTP-only cookie with SameSite=None for cross-site compatibility
+      res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=None; Max-Age=${7 * 24 * 60 * 60}; Path=/`);
 
       res.json({ 
         user: {
@@ -160,8 +155,8 @@ export default async function handler(req, res) {
         { expiresIn: '7d' }
       );
 
-      // Set HTTP-only cookie
-      res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}; Path=/`);
+      // Set HTTP-only cookie with SameSite=None for cross-site compatibility
+      res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=None; Max-Age=${7 * 24 * 60 * 60}; Path=/`);
 
       res.json({ 
         user: {
