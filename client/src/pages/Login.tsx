@@ -19,7 +19,7 @@ declare global {
 export default function Login() {
   const [, setLocation] = useLocation();
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
-  const [showDevLogin, setShowDevLogin] = useState(false);
+  const [showDevLogin, setShowDevLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const queryClient = useQueryClient();
