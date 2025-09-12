@@ -8,10 +8,16 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-// Configure pool with SSL disabled for development
+// Configure pool with flexible SSL settings
+const sslConfig = process.env.NODE_ENV === 'production' ? 
+  { rejectUnauthorized: false } :  // Allow self-signed certs in production
+  process.env.DB_SSL === 'true' ? 
+    { rejectUnauthorized: false } : 
+    false;  // Disable SSL for local development by default
+
 export const pool = new Pool({ 
   connectionString: process.env.DATABASE_URL,
-  ssl: false  // Disable SSL for local development
+  ssl: sslConfig
 });
 
 export const db = drizzle({ client: pool, schema });
