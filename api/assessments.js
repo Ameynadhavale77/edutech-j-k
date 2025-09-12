@@ -28,9 +28,8 @@ if (process.env.MONGODB_URI) {
 }
 
 function verifyToken(req) {
-  const token = req.headers.cookie?.split(';')
-    .find(c => c.trim().startsWith('token='))
-    ?.split('=')[1];
+  // Use req.cookies since we have cookie-parser middleware - prefer new version
+  const token = req.cookies?.token_v2 || req.cookies?.token;
 
   if (!token) {
     throw new Error('No token provided');
