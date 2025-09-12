@@ -78,7 +78,7 @@ export default function Login() {
           </div>
           <CardTitle className="text-2xl font-bold">Welcome to EduPath J&K</CardTitle>
           <CardDescription>
-            Development Login
+            Login
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -119,7 +119,7 @@ export default function Login() {
               className="w-full"
               data-testid="button-dev-login"
             >
-              {devLoginMutation.isPending ? "Signing in..." : "Development Login"}
+              {devLoginMutation.isPending ? "Signing in..." : "Login"}
             </Button>
             <div className="text-center text-xs text-muted-foreground">
               Use test@example.com / test123 or enter your own

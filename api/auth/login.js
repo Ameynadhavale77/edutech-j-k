@@ -50,10 +50,15 @@ export default async function handler(req, res) {
       { expiresIn: '7d' }
     );
 
-    // Set HTTP-only cookie with new version name and clear any old token
+    // Set HTTP-only cookie - adjust for Replit environment
+    const isReplit = process.env.REPLIT_DEV_DOMAIN || process.env.REPL_ID;
+    const cookieSettings = isReplit 
+      ? `HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}; Path=/`
+      : `HttpOnly; Secure; SameSite=None; Max-Age=${7 * 24 * 60 * 60}; Path=/`;
+    
     res.setHeader('Set-Cookie', [
-      `token_v2=${token}; HttpOnly; Secure; SameSite=None; Max-Age=${7 * 24 * 60 * 60}; Path=/`,
-      `token=; Max-Age=0; HttpOnly; Secure; SameSite=None; Path=/` // Clear legacy token
+      `token_v2=${token}; ${cookieSettings}`,
+      `token=; Max-Age=0; HttpOnly; Path=/` // Clear legacy token
     ]);
 
     res.json({ 
