@@ -26,7 +26,10 @@
   },
   "env": {
     "JWT_SECRET": "@jwt_secret",
+    "VITE_GOOGLE_CLIENT_ID": "@vite_google_client_id",
+    "GOOGLE_CLIENT_ID": "@google_client_id",
     "MONGODB_URI": "@mongodb_uri",
-    "SESSION_SECRET": "@session_secret"
+    "SESSION_SECRET": "@session_secret",
+    "NODE_ENV": "production"
   }
 }

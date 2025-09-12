@@ -1,8 +1,33 @@
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 // Simple in-memory storage for demo (replace with your database)
 const users = new Map();
+
+// MongoDB User Schema (if using MongoDB)
+let User = null;
+if (process.env.MONGODB_URI) {
+  try {
+    if (mongoose.connection.readyState === 0) {
+      await mongoose.connect(process.env.MONGODB_URI);
+    }
+    
+    const userSchema = new mongoose.Schema({
+      email: { type: String, required: true, unique: true, lowercase: true },
+      googleId: String,
+      firstName: String,
+      lastName: String,
+      profileImageUrl: String,
+      isVerified: { type: Boolean, default: false },
+      password: String,
+    }, { timestamps: true });
+    
+    User = mongoose.models.User || mongoose.model('User', userSchema);
+  } catch (error) {
+    console.warn('MongoDB connection failed, using in-memory storage');
+  }
+}
 
 const client = new OAuth2Client();
 
@@ -51,55 +76,105 @@ export default async function handler(req, res) {
       email_verified: isVerified
     } = payload;
 
-    // Only allow Gmail addresses
-    if (!email || !email.endsWith('@gmail.com')) {
-      return res.status(400).json({ message: 'Only Gmail addresses are allowed' });
+    if (!email) {
+      return res.status(400).json({ message: 'Email not provided by Google' });
     }
 
-    // Check if user exists, if not create new user
-    let user = users.get(email);
-    
-    if (!user) {
-      user = {
-        id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        googleId,
-        email,
-        firstName: firstName || '',
-        lastName: lastName || '',
-        profileImageUrl: profileImageUrl || '',
-        isVerified: isVerified || false,
-        createdAt: new Date(),
-      };
-      users.set(email, user);
+    let user;
+
+    if (User && mongoose.connection.readyState === 1) {
+      // MongoDB flow
+      user = await User.findOne({ email: email.toLowerCase() });
+      
+      if (!user) {
+        // Create new user
+        user = new User({
+          email: email.toLowerCase(),
+          googleId,
+          firstName: firstName || '',
+          lastName: lastName || '',
+          profileImageUrl: profileImageUrl || '',
+          isVerified: isVerified || false,
+          password: '', // Google users don't need password
+        });
+        await user.save();
+      } else {
+        // Update existing user with Google info
+        user.googleId = googleId;
+        user.firstName = firstName || user.firstName;
+        user.lastName = lastName || user.lastName;
+        user.profileImageUrl = profileImageUrl || user.profileImageUrl;
+        user.isVerified = isVerified || user.isVerified;
+        await user.save();
+      }
+
+      // Generate JWT token
+      const token = jwt.sign(
+        { userId: user._id.toString(), email: user.email },
+        process.env.JWT_SECRET || 'your-secret-key',
+        { expiresIn: '7d' }
+      );
+
+      // Set HTTP-only cookie
+      res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}; Path=/`);
+
+      res.json({ 
+        user: {
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          profileImageUrl: user.profileImageUrl,
+          isVerified: user.isVerified
+        }, 
+        message: 'Google login successful' 
+      });
     } else {
-      // Update existing user info
-      user.firstName = firstName || user.firstName;
-      user.lastName = lastName || user.lastName;
-      user.profileImageUrl = profileImageUrl || user.profileImageUrl;
-      user.isVerified = isVerified || user.isVerified;
+      // Fallback in-memory storage
+      user = users.get(email);
+      
+      if (!user) {
+        user = {
+          id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          googleId,
+          email,
+          firstName: firstName || '',
+          lastName: lastName || '',
+          profileImageUrl: profileImageUrl || '',
+          isVerified: isVerified || false,
+          createdAt: new Date(),
+        };
+        users.set(email, user);
+      } else {
+        // Update existing user info
+        user.firstName = firstName || user.firstName;
+        user.lastName = lastName || user.lastName;
+        user.profileImageUrl = profileImageUrl || user.profileImageUrl;
+        user.isVerified = isVerified || user.isVerified;
+      }
+
+      // Generate JWT token
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        process.env.JWT_SECRET || 'your-secret-key',
+        { expiresIn: '7d' }
+      );
+
+      // Set HTTP-only cookie
+      res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}; Path=/`);
+
+      res.json({ 
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          profileImageUrl: user.profileImageUrl,
+          isVerified: user.isVerified
+        }, 
+        message: 'Google login successful' 
+      });
     }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '7d' }
-    );
-
-    // Set HTTP-only cookie
-    res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}; Path=/`);
-
-    res.json({ 
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        profileImageUrl: user.profileImageUrl,
-        isVerified: user.isVerified
-      }, 
-      message: 'Google login successful' 
-    });
   } catch (error) {
     console.error('Google login error:', error);
     res.status(401).json({ message: 'Google authentication failed' });
