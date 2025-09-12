@@ -18,6 +18,7 @@ import QuizResults from "@/pages/QuizResults";
 import Colleges from "@/pages/Colleges";
 import CollegeDetail from "@/pages/CollegeDetail";
 import Courses from "@/pages/Courses";
+import Resources from "@/pages/Resources";
 import Profile from "@/pages/Profile";
 import NotFound from "@/pages/not-found";
 
@@ -54,6 +55,7 @@ function Router() {
             <Route path="/colleges" component={Colleges} />
             <Route path="/colleges/:name" component={CollegeDetail} />
             <Route path="/courses" component={Courses} />
+            <Route path="/resources" component={Resources} />
             <Route path="/profile" component={Profile} />
           </>
         )}

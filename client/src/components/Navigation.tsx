@@ -52,6 +52,7 @@ export default function Navigation() {
     { href: "/", label: getTranslation("dashboard", currentLanguage) },
     { href: "/colleges", label: getTranslation("colleges", currentLanguage) },
     { href: "/courses", label: getTranslation("courses", currentLanguage) },
+    { href: "/resources", label: getTranslation("resources", currentLanguage) },
     { href: "/quiz", label: getTranslation("assessment", currentLanguage) },
   ];
 
